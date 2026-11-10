@@ -1,0 +1,113 @@
+{
+  "purpose": "只复测首次失败项；不覆盖首次15题指标",
+  "total": 3,
+  "recovered": 1,
+  "questions": [
+    {
+      "question": "谁做过招聘API服务项目？",
+      "baseline_status": 503,
+      "status": 502,
+      "error_code": "MODEL_FORMAT_ERROR",
+      "seconds": 116.11
+    },
+    {
+      "question": "谁能从用户数据中提炼结论并制作可视化报表？",
+      "baseline_status": 502,
+      "status": 502,
+      "error_code": "MODEL_FORMAT_ERROR",
+      "seconds": 110.98
+    },
+    {
+      "question": "谁做过订单服务系统项目？",
+      "baseline_status": 502,
+      "status": 200,
+      "answered": true,
+      "answer": "根据给定简历，做过订单服务系统项目的是：虚构人才30、虚构人才29、虚构人才27、虚构人才28、虚构人才25。",
+      "citations": [
+        {
+          "chunk_id": "24012e4e-1833-5166-8cfc-4e0b42c5f409",
+          "talent_id": "449621d6-b7dc-4938-b71d-8edd3c9645aa",
+          "name": "虚构人才30",
+          "document_id": "2939f727-dc7d-4111-84d5-37f44287ed2e",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：订单服务系统",
+          "download_url": "/api/v1/resumes/2939f727-dc7d-4111-84d5-37f44287ed2e/download"
+        },
+        {
+          "chunk_id": "68f8640f-654f-5dd9-83ea-039c4282a7c1",
+          "talent_id": "06bd0248-1193-4422-be11-5873057a76ba",
+          "name": "虚构人才29",
+          "document_id": "0e3c8b85-001c-4627-a46a-3b08cf9e38b8",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：订单服务系统",
+          "download_url": "/api/v1/resumes/0e3c8b85-001c-4627-a46a-3b08cf9e38b8/download"
+        },
+        {
+          "chunk_id": "f9e9c5a8-a162-5684-8b96-1d373bb42245",
+          "talent_id": "0384bac3-f719-4af0-ad5b-26853636d7ab",
+          "name": "虚构人才27",
+          "document_id": "a2e16f6f-00fa-4621-9ebc-9488bb5cb9a7",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：订单服务系统",
+          "download_url": "/api/v1/resumes/a2e16f6f-00fa-4621-9ebc-9488bb5cb9a7/download"
+        },
+        {
+          "chunk_id": "391d9a5a-d185-5d07-a283-86bc749b3e2e",
+          "talent_id": "13ccbb6e-3e0e-4c8f-848b-b14f6c8943bd",
+          "name": "虚构人才28",
+          "document_id": "5839f510-2c94-4218-83f2-fb36d022252b",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：订单服务系统",
+          "download_url": "/api/v1/resumes/5839f510-2c94-4218-83f2-fb36d022252b/download"
+        },
+        {
+          "chunk_id": "107ce0df-e92d-5af3-8059-95f39d7078f5",
+          "talent_id": "9c8bb25c-134f-4be5-b14c-ce74a4f1a34b",
+          "name": "虚构人才25",
+          "document_id": "f7265ef8-c9f6-4dd2-9a0d-e79099b0c750",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：订单服务系统",
+          "download_url": "/api/v1/resumes/f7265ef8-c9f6-4dd2-9a0d-e79099b0c750/download"
+        }
+      ],
+      "retrieved_talents": [
+        {
+          "id": "449621d6-b7dc-4938-b71d-8edd3c9645aa",
+          "name": "虚构人才30"
+        },
+        {
+          "id": "06bd0248-1193-4422-be11-5873057a76ba",
+          "name": "虚构人才29"
+        },
+        {
+          "id": "0384bac3-f719-4af0-ad5b-26853636d7ab",
+          "name": "虚构人才27"
+        },
+        {
+          "id": "13ccbb6e-3e0e-4c8f-848b-b14f6c8943bd",
+          "name": "虚构人才28"
+        },
+        {
+          "id": "9c8bb25c-134f-4be5-b14c-ce74a4f1a34b",
+          "name": "虚构人才25"
+        }
+      ],
+      "seconds": 73.58
+    }
+  ]
+}

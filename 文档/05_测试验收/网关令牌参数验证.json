@@ -1,0 +1,26 @@
+[
+  {
+    "parameter": "max_tokens",
+    "status": 200,
+    "seconds": 9.14,
+    "finish_reason": "length",
+    "usage": {
+      "prompt_tokens": 2036,
+      "completion_tokens": 1,
+      "total_tokens": 2037
+    },
+    "content_chars": 0
+  },
+  {
+    "parameter": "max_completion_tokens",
+    "status": 200,
+    "seconds": 7.9,
+    "finish_reason": "length",
+    "usage": {
+      "prompt_tokens": 2036,
+      "completion_tokens": 1,
+      "total_tokens": 2037
+    },
+    "content_chars": 0
+  }
+]

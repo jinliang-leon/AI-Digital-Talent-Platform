@@ -1,0 +1,16 @@
+.git
+.env
+.env.*
+!.env.example
+.venv
+.superpowers
+__pycache__
+**/__pycache__
+.pytest_cache
+.ruff_cache
+运行数据
+测试输出
+*.egg-info
+build
+dist
+文档/05_测试验收/截图

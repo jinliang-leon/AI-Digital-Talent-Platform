@@ -1,0 +1,26 @@
+{
+  "upload_seconds": 0.2,
+  "document_id": "184e5084-5f81-44d4-aa1f-f77cb98d50fd",
+  "talent_id": "260a9049-8455-48b4-a755-6e66bedd2065",
+  "task_id": "40bdefa1-114c-4d8b-8d83-2fa4351a3eac",
+  "message": "文件已接收，等待处理",
+  "state": "READY",
+  "error_code": null,
+  "total_seconds": 12.3,
+  "facts": {
+    "name": "容器验收人才",
+    "skills": [
+      "Python"
+    ],
+    "projects": [
+      "招聘API服务"
+    ],
+    "education": [],
+    "experiences": [],
+    "experience_months": 24
+  },
+  "download_status": 307,
+  "download_public_host": true,
+  "passed": true,
+  "test_talent_archived": true
+}

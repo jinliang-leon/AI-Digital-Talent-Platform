@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-10",
+  "native_python": "3.13.5",
+  "container_python": "3.11",
+  "mysql": "8.0.27",
+  "embedding": {
+    "name": "bge-m3:latest",
+    "digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "bert",
+      "families": [
+        "bert"
+      ],
+      "parameter_size": "566.70M",
+      "quantization_level": "F16",
+      "context_length": 8192,
+      "embedding_length": 1024
+    }
+  },
+  "business_database": "ai_digital_talent",
+  "test_database": "ai_digital_talent_test",
+  "namespace": "ai_talent_v1",
+  "test_namespace": "ai_talent_test",
+  "main_redis_db": 9,
+  "test_redis_db": 10,
+  "runtime_env_file_in_image": false,
+  "full_tests_passed": 71,
+  "container_unit_tests_passed": 53,
+  "integration_tests_passed": 18,
+  "rag_output_tokens": 4096,
+  "model_request_timeout_seconds": 90,
+  "evaluation_run": "输出预算修复后，原15题完整复验"
+}

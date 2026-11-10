@@ -1,0 +1,1701 @@
+{
+  "complete": true,
+  "method": {
+    "field_comparison": "字段逐项精确匹配；字符串仅NFKC/大小写/空白规范化，数组比较集合，不改措辞或标点",
+    "precision": "每个JD的eligible组前3名，分母固定3，五个JD取平均",
+    "recall": "十个可回答问题取实际召回人才前5名／冻结相关人数；无答案五题单独统计拒答",
+    "thresholds": {
+      "field_accuracy": 0.9,
+      "precision_at_3": 0.8,
+      "recall_at_5": 0.8
+    }
+  },
+  "parsing": [
+    {
+      "name": "虚构人才01",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才01",
+        "skills": [
+          "Python",
+          "MySQL",
+          "Docker"
+        ],
+        "projects": [
+          "招聘API服务"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责后端接口开发、数据库查询与缓存优化。"
+        ],
+        "experience_months": 12
+      }
+    },
+    {
+      "name": "虚构人才02",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才02",
+        "skills": [
+          "Python",
+          "FastAPI",
+          "MySQL",
+          "Redis",
+          "Docker"
+        ],
+        "projects": [
+          "招聘API服务"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责后端接口开发、数据库查询与缓存优化。"
+        ],
+        "experience_months": 24
+      }
+    },
+    {
+      "name": "虚构人才03",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": false,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才03",
+        "skills": [
+          "Python",
+          "FastAPI",
+          "MySQL",
+          "Redis",
+          "Docker"
+        ],
+        "projects": [
+          "招聘API服务",
+          "负责后端接口开发、数据库查询与缓存优化。"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责后端接口开发、数据库查询与缓存优化。"
+        ],
+        "experience_months": 36
+      }
+    },
+    {
+      "name": "虚构人才04",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": false,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才04",
+        "skills": [
+          "Python",
+          "FastAPI",
+          "MySQL",
+          "Redis",
+          "Docker"
+        ],
+        "projects": [
+          "招聘API服务"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责后端接口开发、数据库查询与缓存优化"
+        ],
+        "experience_months": 48
+      }
+    },
+    {
+      "name": "虚构人才05",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才05",
+        "skills": [
+          "Python",
+          "FastAPI",
+          "MySQL",
+          "Redis",
+          "Docker"
+        ],
+        "projects": [
+          "招聘API服务"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责后端接口开发、数据库查询与缓存优化。"
+        ],
+        "experience_months": null
+      }
+    },
+    {
+      "name": "虚构人才06",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才06",
+        "skills": [
+          "Python",
+          "FastAPI",
+          "MySQL",
+          "Redis",
+          "Docker"
+        ],
+        "projects": [
+          "招聘API服务"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责后端接口开发、数据库查询与缓存优化。"
+        ],
+        "experience_months": 60
+      }
+    },
+    {
+      "name": "虚构人才07",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才07",
+        "skills": [
+          "Python",
+          "Pandas",
+          "Excel"
+        ],
+        "projects": [
+          "用户行为分析报表"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责用户行为分析、数据清洗与业务报表。"
+        ],
+        "experience_months": 12
+      }
+    },
+    {
+      "name": "虚构人才08",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才08",
+        "skills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "Power BI",
+          "Excel"
+        ],
+        "projects": [
+          "用户行为分析报表"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责用户行为分析、数据清洗与业务报表。"
+        ],
+        "experience_months": 24
+      }
+    },
+    {
+      "name": "虚构人才09",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才09",
+        "skills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "Power BI",
+          "Excel"
+        ],
+        "projects": [
+          "用户行为分析报表"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责用户行为分析、数据清洗与业务报表。"
+        ],
+        "experience_months": 36
+      }
+    },
+    {
+      "name": "虚构人才10",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": false,
+        "experiences": false,
+        "education": false
+      },
+      "actual_facts": {
+        "name": "虚构人才10",
+        "skills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "Power BI",
+          "Excel"
+        ],
+        "projects": [
+          "项目：用户行为分析报表"
+        ],
+        "education": [
+          "教育经历：计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "工作经历：负责用户行为分析、数据清洗与业务报表。"
+        ],
+        "experience_months": 48
+      }
+    },
+    {
+      "name": "虚构人才11",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": false,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才11",
+        "skills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "Power BI",
+          "Excel"
+        ],
+        "projects": [
+          "用户行为分析报表"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责用户行为分析、数据清洗与业务报表"
+        ],
+        "experience_months": null
+      }
+    },
+    {
+      "name": "虚构人才12",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才12",
+        "skills": [
+          "Python",
+          "SQL",
+          "Pandas",
+          "Power BI",
+          "Excel"
+        ],
+        "projects": [
+          "用户行为分析报表"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责用户行为分析、数据清洗与业务报表。"
+        ],
+        "experience_months": 60
+      }
+    },
+    {
+      "name": "虚构人才13",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才13",
+        "skills": [
+          "JavaScript",
+          "Vue",
+          "CSS"
+        ],
+        "projects": [
+          "电商平台前端"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责电商商品列表、购物车及用户界面开发。"
+        ],
+        "experience_months": 12
+      }
+    },
+    {
+      "name": "虚构人才14",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才14",
+        "skills": [
+          "JavaScript",
+          "TypeScript",
+          "Vue",
+          "HTML",
+          "CSS"
+        ],
+        "projects": [
+          "电商平台前端"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责电商商品列表、购物车及用户界面开发。"
+        ],
+        "experience_months": 24
+      }
+    },
+    {
+      "name": "虚构人才15",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才15",
+        "skills": [
+          "JavaScript",
+          "TypeScript",
+          "Vue",
+          "HTML",
+          "CSS"
+        ],
+        "projects": [
+          "电商平台前端"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责电商商品列表、购物车及用户界面开发。"
+        ],
+        "experience_months": 36
+      }
+    },
+    {
+      "name": "虚构人才16",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才16",
+        "skills": [
+          "JavaScript",
+          "TypeScript",
+          "Vue",
+          "HTML",
+          "CSS"
+        ],
+        "projects": [
+          "电商平台前端"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责电商商品列表、购物车及用户界面开发。"
+        ],
+        "experience_months": 48
+      }
+    },
+    {
+      "name": "虚构人才17",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": false,
+        "experiences": false,
+        "education": false
+      },
+      "actual_facts": {
+        "name": "虚构人才17",
+        "skills": [
+          "JavaScript",
+          "TypeScript",
+          "Vue",
+          "HTML",
+          "CSS"
+        ],
+        "projects": [
+          "项目：电商平台前端"
+        ],
+        "education": [
+          "教育经历：计算机相关专业（虚构）"
+        ],
+        "experiences": [],
+        "experience_months": null
+      }
+    },
+    {
+      "name": "虚构人才18",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才18",
+        "skills": [
+          "JavaScript",
+          "TypeScript",
+          "Vue",
+          "HTML",
+          "CSS"
+        ],
+        "projects": [
+          "电商平台前端"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责电商商品列表、购物车及用户界面开发。"
+        ],
+        "experience_months": 60
+      }
+    },
+    {
+      "name": "虚构人才19",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才19",
+        "skills": [
+          "Linux",
+          "Kubernetes",
+          "Shell"
+        ],
+        "projects": [
+          "容器集群监控"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责容器集群部署、监控告警和运维脚本。"
+        ],
+        "experience_months": 12
+      }
+    },
+    {
+      "name": "虚构人才20",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才20",
+        "skills": [
+          "Linux",
+          "Docker",
+          "Kubernetes",
+          "Prometheus",
+          "Shell"
+        ],
+        "projects": [
+          "容器集群监控"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责容器集群部署、监控告警和运维脚本。"
+        ],
+        "experience_months": 24
+      }
+    },
+    {
+      "name": "虚构人才21",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才21",
+        "skills": [
+          "Linux",
+          "Docker",
+          "Kubernetes",
+          "Prometheus",
+          "Shell"
+        ],
+        "projects": [
+          "容器集群监控"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责容器集群部署、监控告警和运维脚本。"
+        ],
+        "experience_months": 36
+      }
+    },
+    {
+      "name": "虚构人才22",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才22",
+        "skills": [
+          "Linux",
+          "Docker",
+          "Kubernetes",
+          "Prometheus",
+          "Shell"
+        ],
+        "projects": [
+          "容器集群监控"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责容器集群部署、监控告警和运维脚本。"
+        ],
+        "experience_months": 48
+      }
+    },
+    {
+      "name": "虚构人才23",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才23",
+        "skills": [
+          "Linux",
+          "Docker",
+          "Kubernetes",
+          "Prometheus",
+          "Shell"
+        ],
+        "projects": [
+          "容器集群监控"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责容器集群部署、监控告警和运维脚本。"
+        ],
+        "experience_months": null
+      }
+    },
+    {
+      "name": "虚构人才24",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才24",
+        "skills": [
+          "Linux",
+          "Docker",
+          "Kubernetes",
+          "Prometheus",
+          "Shell"
+        ],
+        "projects": [
+          "容器集群监控"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责容器集群部署、监控告警和运维脚本。"
+        ],
+        "experience_months": 60
+      }
+    },
+    {
+      "name": "虚构人才25",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才25",
+        "skills": [
+          "Java",
+          "MySQL",
+          "Maven"
+        ],
+        "projects": [
+          "订单服务系统"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "experience_months": 12
+      }
+    },
+    {
+      "name": "虚构人才26",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才26",
+        "skills": [
+          "Java",
+          "Spring Boot",
+          "MySQL",
+          "Redis",
+          "Maven"
+        ],
+        "projects": [
+          "订单服务系统"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "experience_months": 24
+      }
+    },
+    {
+      "name": "虚构人才27",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才27",
+        "skills": [
+          "Java",
+          "Spring Boot",
+          "MySQL",
+          "Redis",
+          "Maven"
+        ],
+        "projects": [
+          "订单服务系统"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "experience_months": 36
+      }
+    },
+    {
+      "name": "虚构人才28",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": false,
+        "experiences": false,
+        "education": false
+      },
+      "actual_facts": {
+        "name": "虚构人才28",
+        "skills": [
+          "Java",
+          "Spring Boot",
+          "MySQL",
+          "Redis",
+          "Maven"
+        ],
+        "projects": [
+          "项目：订单服务系统"
+        ],
+        "education": [
+          "教育经历：计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "工作经历：负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "experience_months": 48
+      }
+    },
+    {
+      "name": "虚构人才29",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": false,
+        "experiences": false,
+        "education": false
+      },
+      "actual_facts": {
+        "name": "虚构人才29",
+        "skills": [
+          "Java",
+          "Spring Boot",
+          "MySQL",
+          "Redis",
+          "Maven"
+        ],
+        "projects": [
+          "项目：订单服务系统",
+          "项目说明：负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "education": [
+          "教育经历：计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "工作经历：负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "experience_months": null
+      }
+    },
+    {
+      "name": "虚构人才30",
+      "state": "READY",
+      "correct_fields": {
+        "name": true,
+        "skills": true,
+        "experience_months": true,
+        "projects": true,
+        "experiences": true,
+        "education": true
+      },
+      "actual_facts": {
+        "name": "虚构人才30",
+        "skills": [
+          "Java",
+          "Spring Boot",
+          "MySQL",
+          "Redis",
+          "Maven"
+        ],
+        "projects": [
+          "订单服务系统"
+        ],
+        "education": [
+          "计算机相关专业（虚构）"
+        ],
+        "experiences": [
+          "负责订单服务、接口联调和数据库性能优化。"
+        ],
+        "experience_months": 60
+      }
+    }
+  ],
+  "matching": [
+    {
+      "title": "Python后端工程师",
+      "precision_at_3": 1.0,
+      "bidirectional_equal": true,
+      "seconds": 0.79,
+      "status": 200,
+      "top_names": [
+        "虚构人才03",
+        "虚构人才06",
+        "虚构人才04"
+      ],
+      "eligible_count": 3,
+      "needs_review_count": 17,
+      "excluded_count": 10
+    },
+    {
+      "title": "数据分析工程师",
+      "precision_at_3": 1.0,
+      "bidirectional_equal": true,
+      "seconds": 0.79,
+      "status": 200,
+      "top_names": [
+        "虚构人才12",
+        "虚构人才09",
+        "虚构人才10"
+      ],
+      "eligible_count": 3,
+      "needs_review_count": 17,
+      "excluded_count": 10
+    },
+    {
+      "title": "前端开发工程师",
+      "precision_at_3": 1.0,
+      "bidirectional_equal": true,
+      "seconds": 0.7,
+      "status": 200,
+      "top_names": [
+        "虚构人才18",
+        "虚构人才16",
+        "虚构人才15"
+      ],
+      "eligible_count": 3,
+      "needs_review_count": 17,
+      "excluded_count": 10
+    },
+    {
+      "title": "运维开发工程师",
+      "precision_at_3": 1.0,
+      "bidirectional_equal": true,
+      "seconds": 0.71,
+      "status": 200,
+      "top_names": [
+        "虚构人才21",
+        "虚构人才24",
+        "虚构人才22"
+      ],
+      "eligible_count": 3,
+      "needs_review_count": 17,
+      "excluded_count": 10
+    },
+    {
+      "title": "Java后端工程师",
+      "precision_at_3": 1.0,
+      "bidirectional_equal": true,
+      "seconds": 0.73,
+      "status": 200,
+      "top_names": [
+        "虚构人才30",
+        "虚构人才28",
+        "虚构人才27"
+      ],
+      "eligible_count": 3,
+      "needs_review_count": 17,
+      "excluded_count": 10
+    }
+  ],
+  "questions": [
+    {
+      "question": "谁做过招聘API服务项目？",
+      "answerable": true,
+      "status": 503,
+      "error_code": "MODEL_UNAVAILABLE",
+      "recall_at_5": 0,
+      "seconds": 90.33
+    },
+    {
+      "question": "谁有服务端接口开发和数据库缓存优化经历？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "虚构人才01、虚构人才03、虚构人才04、虚构人才05有服务端接口开发和数据库缓存优化相关经历。",
+      "retrieved_names": [
+        "虚构人才01",
+        "虚构人才29",
+        "虚构人才03",
+        "虚构人才04",
+        "虚构人才05"
+      ],
+      "citations": [
+        {
+          "chunk_id": "a9e9111b-62a2-5cf4-839c-dd3b2889a657",
+          "talent_id": "d3ccba0c-f6e4-41b8-8a11-1707d5b870dd",
+          "name": "虚构人才01",
+          "document_id": "d21c2587-6872-490a-889b-cf11b7a30e07",
+          "document_revision": 1,
+          "talent_revision": 2,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "负责后端接口开发、数据库查询与缓存优化。",
+          "download_url": "/api/v1/resumes/d21c2587-6872-490a-889b-cf11b7a30e07/download"
+        },
+        {
+          "chunk_id": "9de01949-6108-5d79-9d0e-55e83c876c73",
+          "talent_id": "b95194a0-788d-4250-886a-1bd3f58e8976",
+          "name": "虚构人才03",
+          "document_id": "3fb10eaf-e7a9-4a33-a29a-bdd3960b90fb",
+          "document_revision": 1,
+          "talent_revision": 2,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "负责后端接口开发、数据库查询与缓存优化。",
+          "download_url": "/api/v1/resumes/3fb10eaf-e7a9-4a33-a29a-bdd3960b90fb/download"
+        },
+        {
+          "chunk_id": "fc1677bc-6af2-5ec5-847a-fd2fa244b746",
+          "talent_id": "341e58e1-067b-4102-ab05-fdb2f53121ae",
+          "name": "虚构人才04",
+          "document_id": "1d287037-fbb3-4d50-999b-87217c761e26",
+          "document_revision": 1,
+          "talent_revision": 2,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "负责后端接口开发、数据库查询与缓存优化。",
+          "download_url": "/api/v1/resumes/1d287037-fbb3-4d50-999b-87217c761e26/download"
+        },
+        {
+          "chunk_id": "2b22fb5d-96af-5b49-917d-7d0d8d8e00dc",
+          "talent_id": "fe6fad87-0ec2-4fac-a0b6-4b2ad98cb700",
+          "name": "虚构人才05",
+          "document_id": "7909f263-17a4-4842-9daa-1a9c6580bacd",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "负责后端接口开发、数据库查询与缓存优化。",
+          "download_url": "/api/v1/resumes/7909f263-17a4-4842-9daa-1a9c6580bacd/download"
+        }
+      ],
+      "recall_at_5": 0.6666666666666666,
+      "citations_locatable": true,
+      "seconds": 86.99
+    },
+    {
+      "question": "谁做过用户行为分析报表项目？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "做过“用户行为分析报表”项目的有：虚构人才07、虚构人才09、虚构人才10、虚构人才11、虚构人才12。",
+      "retrieved_names": [
+        "虚构人才07",
+        "虚构人才09",
+        "虚构人才12",
+        "虚构人才10",
+        "虚构人才11"
+      ],
+      "citations": [
+        {
+          "chunk_id": "2cae3e65-31c7-5cfb-8c3f-763e59b0ac78",
+          "talent_id": "170dd9da-ec50-47d9-b5aa-65d194f52c7f",
+          "name": "虚构人才07",
+          "document_id": "bd144df1-8ad9-439a-968c-db91b271c730",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：用户行为分析报表",
+          "download_url": "/api/v1/resumes/bd144df1-8ad9-439a-968c-db91b271c730/download"
+        },
+        {
+          "chunk_id": "4906167c-9bdb-507a-abd3-ad7ed64a951a",
+          "talent_id": "375cb1b9-6abc-48a5-adf3-cdd98f110b06",
+          "name": "虚构人才09",
+          "document_id": "e5136ff3-e9cb-4d60-9a98-1523ee0c3e23",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：用户行为分析报表",
+          "download_url": "/api/v1/resumes/e5136ff3-e9cb-4d60-9a98-1523ee0c3e23/download"
+        },
+        {
+          "chunk_id": "86ef8922-ee00-5378-a670-8857ca715c89",
+          "talent_id": "9c376fd5-7315-44f4-8483-5cb862dbe626",
+          "name": "虚构人才12",
+          "document_id": "04c45ac9-0b20-404a-a1bb-280c95f37c12",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：用户行为分析报表",
+          "download_url": "/api/v1/resumes/04c45ac9-0b20-404a-a1bb-280c95f37c12/download"
+        },
+        {
+          "chunk_id": "34b83553-8250-5028-9056-b5403d4c1b61",
+          "talent_id": "6e76c733-9683-43e1-9047-7c59a36be355",
+          "name": "虚构人才10",
+          "document_id": "8156ea42-0245-4208-a698-cb48fd0efae1",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：用户行为分析报表",
+          "download_url": "/api/v1/resumes/8156ea42-0245-4208-a698-cb48fd0efae1/download"
+        },
+        {
+          "chunk_id": "c8a71e96-b4ae-5403-995a-97d410ca82a1",
+          "talent_id": "dd9aebfc-c12c-4e17-8055-0ca7c942c55f",
+          "name": "虚构人才11",
+          "document_id": "8b9159b6-eb78-466f-8871-fc55d40761d2",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：用户行为分析报表",
+          "download_url": "/api/v1/resumes/8b9159b6-eb78-466f-8871-fc55d40761d2/download"
+        }
+      ],
+      "recall_at_5": 0.8333333333333334,
+      "citations_locatable": true,
+      "seconds": 52.63
+    },
+    {
+      "question": "谁能从用户数据中提炼结论并制作可视化报表？",
+      "answerable": true,
+      "status": 502,
+      "error_code": "MODEL_FORMAT_ERROR",
+      "recall_at_5": 0,
+      "seconds": 111.3
+    },
+    {
+      "question": "谁做过电商平台前端项目？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "虚构人才16、虚构人才13、虚构人才14、虚构人才18、虚构人才15均做过电商平台前端项目。",
+      "retrieved_names": [
+        "虚构人才16",
+        "虚构人才13",
+        "虚构人才14",
+        "虚构人才18",
+        "虚构人才15"
+      ],
+      "citations": [
+        {
+          "chunk_id": "ad6cbfdb-20ed-5af2-9a6c-df79bfc4b663",
+          "talent_id": "730a00d2-9b48-4146-ba58-548d50586586",
+          "name": "虚构人才16",
+          "document_id": "f0e1ab18-e3c6-481f-89f4-c7f7ebe34979",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：电商平台前端",
+          "download_url": "/api/v1/resumes/f0e1ab18-e3c6-481f-89f4-c7f7ebe34979/download"
+        },
+        {
+          "chunk_id": "355771fb-d918-514e-8c73-e76fe3a6373d",
+          "talent_id": "f7b614d8-47ce-4455-af26-d0d110844f81",
+          "name": "虚构人才13",
+          "document_id": "1795f0d3-665b-4542-95b0-694f35a63e48",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：电商平台前端",
+          "download_url": "/api/v1/resumes/1795f0d3-665b-4542-95b0-694f35a63e48/download"
+        },
+        {
+          "chunk_id": "25cb3352-a87b-532d-b44f-de7751f39056",
+          "talent_id": "46617210-ae7c-4fd4-87be-fa2dcfd54cbf",
+          "name": "虚构人才14",
+          "document_id": "e6c8c997-5b22-4e75-897f-a8116c993e3f",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：电商平台前端",
+          "download_url": "/api/v1/resumes/e6c8c997-5b22-4e75-897f-a8116c993e3f/download"
+        },
+        {
+          "chunk_id": "bd8b86e8-79d4-5881-9822-fe4f3e93aa3b",
+          "talent_id": "907100ae-419f-4e73-95a8-3850a98a9c4b",
+          "name": "虚构人才18",
+          "document_id": "b0c7396c-f1d8-4915-b91f-4a03dbba21b8",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：电商平台前端",
+          "download_url": "/api/v1/resumes/b0c7396c-f1d8-4915-b91f-4a03dbba21b8/download"
+        },
+        {
+          "chunk_id": "61dfd427-2232-5534-a588-675b9ad20d61",
+          "talent_id": "c716f8f7-b95b-47ec-879f-ff8b76499b3f",
+          "name": "虚构人才15",
+          "document_id": "80367a87-dc86-4d8a-9e94-416c3676c6f8",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：电商平台前端",
+          "download_url": "/api/v1/resumes/80367a87-dc86-4d8a-9e94-416c3676c6f8/download"
+        }
+      ],
+      "recall_at_5": 0.8333333333333334,
+      "citations_locatable": true,
+      "seconds": 20.86
+    },
+    {
+      "question": "谁做过线上商店的页面和购物车交互？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "虚构人才16、虚构人才15、虚构人才18、虚构人才14、虚构人才17做过线上商店的页面和购物车交互。",
+      "retrieved_names": [
+        "虚构人才16",
+        "虚构人才15",
+        "虚构人才18",
+        "虚构人才14",
+        "虚构人才17"
+      ],
+      "citations": [
+        {
+          "chunk_id": "ad6cbfdb-20ed-5af2-9a6c-df79bfc4b663",
+          "talent_id": "730a00d2-9b48-4146-ba58-548d50586586",
+          "name": "虚构人才16",
+          "document_id": "f0e1ab18-e3c6-481f-89f4-c7f7ebe34979",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责电商商品列表、购物车及用户界面开发。",
+          "download_url": "/api/v1/resumes/f0e1ab18-e3c6-481f-89f4-c7f7ebe34979/download"
+        },
+        {
+          "chunk_id": "61dfd427-2232-5534-a588-675b9ad20d61",
+          "talent_id": "c716f8f7-b95b-47ec-879f-ff8b76499b3f",
+          "name": "虚构人才15",
+          "document_id": "80367a87-dc86-4d8a-9e94-416c3676c6f8",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责电商商品列表、购物车及用户界面开发。",
+          "download_url": "/api/v1/resumes/80367a87-dc86-4d8a-9e94-416c3676c6f8/download"
+        },
+        {
+          "chunk_id": "bd8b86e8-79d4-5881-9822-fe4f3e93aa3b",
+          "talent_id": "907100ae-419f-4e73-95a8-3850a98a9c4b",
+          "name": "虚构人才18",
+          "document_id": "b0c7396c-f1d8-4915-b91f-4a03dbba21b8",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责电商商品列表、购物车及用户界面开发。",
+          "download_url": "/api/v1/resumes/b0c7396c-f1d8-4915-b91f-4a03dbba21b8/download"
+        },
+        {
+          "chunk_id": "25cb3352-a87b-532d-b44f-de7751f39056",
+          "talent_id": "46617210-ae7c-4fd4-87be-fa2dcfd54cbf",
+          "name": "虚构人才14",
+          "document_id": "e6c8c997-5b22-4e75-897f-a8116c993e3f",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责电商商品列表、购物车及用户界面开发。",
+          "download_url": "/api/v1/resumes/e6c8c997-5b22-4e75-897f-a8116c993e3f/download"
+        },
+        {
+          "chunk_id": "7a65679e-dcb9-57b0-9e9b-a7ce891b0b32",
+          "talent_id": "e0ddc8bb-2979-4345-a6ad-7adf6ec9ef57",
+          "name": "虚构人才17",
+          "document_id": "85d1596a-bda8-4095-aa86-427e723d7868",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责电商商品列表、购物车及用户界面开发。",
+          "download_url": "/api/v1/resumes/85d1596a-bda8-4095-aa86-427e723d7868/download"
+        }
+      ],
+      "recall_at_5": 0.8333333333333334,
+      "citations_locatable": true,
+      "seconds": 9.07
+    },
+    {
+      "question": "谁做过容器集群监控项目？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "虚构人才20、虚构人才21、虚构人才22、虚构人才23、虚构人才24",
+      "retrieved_names": [
+        "虚构人才20",
+        "虚构人才21",
+        "虚构人才24",
+        "虚构人才23",
+        "虚构人才22"
+      ],
+      "citations": [
+        {
+          "chunk_id": "fa073594-ca8a-5748-aa91-bb03a8a6933a",
+          "talent_id": "ccead1f4-dc7c-4e0f-8d42-4e211c0e86d2",
+          "name": "虚构人才20",
+          "document_id": "0f456354-4735-4afd-9e48-03e3a7dca049",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：容器集群监控",
+          "download_url": "/api/v1/resumes/0f456354-4735-4afd-9e48-03e3a7dca049/download"
+        },
+        {
+          "chunk_id": "af5cbfeb-96e5-57f1-9714-857a27d38e74",
+          "talent_id": "c66719b1-c996-427a-8f43-2bef8062486d",
+          "name": "虚构人才21",
+          "document_id": "6abcb77a-560e-4f08-b97b-bd413bd38886",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：容器集群监控",
+          "download_url": "/api/v1/resumes/6abcb77a-560e-4f08-b97b-bd413bd38886/download"
+        },
+        {
+          "chunk_id": "853fe771-7ea2-5e13-9c7d-fdd3e656cd11",
+          "talent_id": "46814781-cac3-4a4b-8482-624c2d67b0b5",
+          "name": "虚构人才24",
+          "document_id": "8f23b28f-fdbb-49de-b824-f05b1c6286d0",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：容器集群监控",
+          "download_url": "/api/v1/resumes/8f23b28f-fdbb-49de-b824-f05b1c6286d0/download"
+        },
+        {
+          "chunk_id": "c7c712a8-b93b-5153-88b4-d38fbf655a69",
+          "talent_id": "65bd77fc-7e85-4600-9bd6-025a87a81c3b",
+          "name": "虚构人才23",
+          "document_id": "4a0c558a-2a4a-44f8-b752-24a8a0652de0",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：容器集群监控",
+          "download_url": "/api/v1/resumes/4a0c558a-2a4a-44f8-b752-24a8a0652de0/download"
+        },
+        {
+          "chunk_id": "3f989088-9473-5b09-80ab-1adccf5bd750",
+          "talent_id": "0d149159-8b46-4ac2-b418-a19369c934f0",
+          "name": "虚构人才22",
+          "document_id": "cdccf691-5eb2-4538-a89e-938e02d02179",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目：容器集群监控",
+          "download_url": "/api/v1/resumes/cdccf691-5eb2-4538-a89e-938e02d02179/download"
+        }
+      ],
+      "recall_at_5": 0.8333333333333334,
+      "citations_locatable": true,
+      "seconds": 61.56
+    },
+    {
+      "question": "谁有容器部署、系统监控和自动化运维经验？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "虚构人才19、虚构人才20、虚构人才21、虚构人才22、虚构人才24均有容器集群部署、监控告警和运维脚本经验。",
+      "retrieved_names": [
+        "虚构人才21",
+        "虚构人才20",
+        "虚构人才19",
+        "虚构人才24",
+        "虚构人才22"
+      ],
+      "citations": [
+        {
+          "chunk_id": "af5cbfeb-96e5-57f1-9714-857a27d38e74",
+          "talent_id": "c66719b1-c996-427a-8f43-2bef8062486d",
+          "name": "虚构人才21",
+          "document_id": "6abcb77a-560e-4f08-b97b-bd413bd38886",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责容器集群部署、监控告警和运维脚本。",
+          "download_url": "/api/v1/resumes/6abcb77a-560e-4f08-b97b-bd413bd38886/download"
+        },
+        {
+          "chunk_id": "fa073594-ca8a-5748-aa91-bb03a8a6933a",
+          "talent_id": "ccead1f4-dc7c-4e0f-8d42-4e211c0e86d2",
+          "name": "虚构人才20",
+          "document_id": "0f456354-4735-4afd-9e48-03e3a7dca049",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责容器集群部署、监控告警和运维脚本。",
+          "download_url": "/api/v1/resumes/0f456354-4735-4afd-9e48-03e3a7dca049/download"
+        },
+        {
+          "chunk_id": "e3bc99c5-cd66-5ed1-89b3-75d3f0704b8c",
+          "talent_id": "4e361d2d-4d0f-4f1d-8347-e0c01cdfcfc4",
+          "name": "虚构人才19",
+          "document_id": "c469f839-8647-43f0-8956-eb5bed7ffdd1",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责容器集群部署、监控告警和运维脚本。",
+          "download_url": "/api/v1/resumes/c469f839-8647-43f0-8956-eb5bed7ffdd1/download"
+        },
+        {
+          "chunk_id": "853fe771-7ea2-5e13-9c7d-fdd3e656cd11",
+          "talent_id": "46814781-cac3-4a4b-8482-624c2d67b0b5",
+          "name": "虚构人才24",
+          "document_id": "8f23b28f-fdbb-49de-b824-f05b1c6286d0",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责容器集群部署、监控告警和运维脚本。",
+          "download_url": "/api/v1/resumes/8f23b28f-fdbb-49de-b824-f05b1c6286d0/download"
+        },
+        {
+          "chunk_id": "3f989088-9473-5b09-80ab-1adccf5bd750",
+          "talent_id": "0d149159-8b46-4ac2-b418-a19369c934f0",
+          "name": "虚构人才22",
+          "document_id": "cdccf691-5eb2-4538-a89e-938e02d02179",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "项目说明：负责容器集群部署、监控告警和运维脚本。",
+          "download_url": "/api/v1/resumes/cdccf691-5eb2-4538-a89e-938e02d02179/download"
+        }
+      ],
+      "recall_at_5": 0.8333333333333334,
+      "citations_locatable": true,
+      "seconds": 104.96
+    },
+    {
+      "question": "谁做过订单服务系统项目？",
+      "answerable": true,
+      "status": 502,
+      "error_code": "MODEL_FORMAT_ERROR",
+      "recall_at_5": 0,
+      "seconds": 110.71
+    },
+    {
+      "question": "谁参与过订单后端接口联调与性能优化？",
+      "answerable": true,
+      "status": 200,
+      "answered": true,
+      "answer": "根据给定资料，参与过订单后端接口联调与性能优化的是：虚构人才25、虚构人才26、虚构人才27、虚构人才28、虚构人才30。其工作经历均注明负责订单服务、接口联调和数据库性能优化。",
+      "retrieved_names": [
+        "虚构人才25",
+        "虚构人才28",
+        "虚构人才26",
+        "虚构人才30",
+        "虚构人才27"
+      ],
+      "citations": [
+        {
+          "chunk_id": "107ce0df-e92d-5af3-8059-95f39d7078f5",
+          "talent_id": "9c8bb25c-134f-4be5-b14c-ce74a4f1a34b",
+          "name": "虚构人才25",
+          "document_id": "f7265ef8-c9f6-4dd2-9a0d-e79099b0c750",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "工作经历：负责订单服务、接口联调和数据库性能优化。",
+          "download_url": "/api/v1/resumes/f7265ef8-c9f6-4dd2-9a0d-e79099b0c750/download"
+        },
+        {
+          "chunk_id": "391d9a5a-d185-5d07-a283-86bc749b3e2e",
+          "talent_id": "13ccbb6e-3e0e-4c8f-848b-b14f6c8943bd",
+          "name": "虚构人才28",
+          "document_id": "5839f510-2c94-4218-83f2-fb36d022252b",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "工作经历：负责订单服务、接口联调和数据库性能优化。",
+          "download_url": "/api/v1/resumes/5839f510-2c94-4218-83f2-fb36d022252b/download"
+        },
+        {
+          "chunk_id": "85813bf1-f79e-540f-b08d-bf7b73ddf5f0",
+          "talent_id": "5233ef33-0ac3-4c56-a00b-744683b99a04",
+          "name": "虚构人才26",
+          "document_id": "d0080ab0-ccf1-4716-b0cd-be32d6a8e0b3",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "工作经历：负责订单服务、接口联调和数据库性能优化。",
+          "download_url": "/api/v1/resumes/d0080ab0-ccf1-4716-b0cd-be32d6a8e0b3/download"
+        },
+        {
+          "chunk_id": "24012e4e-1833-5166-8cfc-4e0b42c5f409",
+          "talent_id": "449621d6-b7dc-4938-b71d-8edd3c9645aa",
+          "name": "虚构人才30",
+          "document_id": "2939f727-dc7d-4111-84d5-37f44287ed2e",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "工作经历：负责订单服务、接口联调和数据库性能优化。",
+          "download_url": "/api/v1/resumes/2939f727-dc7d-4111-84d5-37f44287ed2e/download"
+        },
+        {
+          "chunk_id": "f9e9c5a8-a162-5684-8b96-1d373bb42245",
+          "talent_id": "0384bac3-f719-4af0-ad5b-26853636d7ab",
+          "name": "虚构人才27",
+          "document_id": "a2e16f6f-00fa-4621-9ebc-9488bb5cb9a7",
+          "document_revision": 1,
+          "talent_revision": 1,
+          "page_no": 1,
+          "paragraph_no": null,
+          "quote": "工作经历：负责订单服务、接口联调和数据库性能优化。",
+          "download_url": "/api/v1/resumes/a2e16f6f-00fa-4621-9ebc-9488bb5cb9a7/download"
+        }
+      ],
+      "recall_at_5": 0.8333333333333334,
+      "citations_locatable": true,
+      "seconds": 13.66
+    },
+    {
+      "question": "谁有量子纠错芯片流片经验？",
+      "answerable": false,
+      "status": 200,
+      "answered": false,
+      "answer": "未找到足够依据，请调整问题或补充简历。",
+      "retrieved_names": [
+        "虚构人才24",
+        "虚构人才20",
+        "虚构人才21",
+        "虚构人才22",
+        "虚构人才23"
+      ],
+      "citations": [],
+      "recall_at_5": null,
+      "citations_locatable": true,
+      "seconds": 7.08
+    },
+    {
+      "question": "谁有深空激光通信硬件设计经历？",
+      "answerable": false,
+      "status": 200,
+      "answered": false,
+      "answer": "未找到足够依据，请调整问题或补充简历。",
+      "retrieved_names": [
+        "虚构人才23",
+        "虚构人才21",
+        "虚构人才20",
+        "虚构人才19",
+        "虚构人才24"
+      ],
+      "citations": [],
+      "recall_at_5": null,
+      "citations_locatable": true,
+      "seconds": 14.31
+    },
+    {
+      "question": "谁做过自动驾驶激光雷达芯片量产？",
+      "answerable": false,
+      "status": 200,
+      "answered": false,
+      "answer": "未找到足够依据，请调整问题或补充简历。",
+      "retrieved_names": [],
+      "citations": [],
+      "recall_at_5": null,
+      "citations_locatable": true,
+      "seconds": 0.11
+    },
+    {
+      "question": "谁参与过海底光缆铺设项目？",
+      "answerable": false,
+      "status": 200,
+      "answered": false,
+      "answer": "未找到足够依据，请调整问题或补充简历。",
+      "retrieved_names": [],
+      "citations": [],
+      "recall_at_5": null,
+      "citations_locatable": true,
+      "seconds": 0.13
+    },
+    {
+      "question": "谁有心脏起搏器临床试验经验？",
+      "answerable": false,
+      "status": 200,
+      "answered": false,
+      "answer": "未找到足够依据，请调整问题或补充简历。",
+      "retrieved_names": [
+        "虚构人才09",
+        "虚构人才07",
+        "虚构人才24",
+        "虚构人才21",
+        "虚构人才19"
+      ],
+      "citations": [],
+      "recall_at_5": null,
+      "citations_locatable": true,
+      "seconds": 7.35
+    }
+  ],
+  "field_accuracy": 0.9166666666666666,
+  "field_counts": {
+    "correct": 165,
+    "total": 180
+  },
+  "summary": {
+    "ready_resumes": 30,
+    "field_accuracy": 0.9166666666666666,
+    "precision_at_3": 1.0,
+    "recall_at_5": 0.5666666666666667,
+    "unknown_refusal_rate": 1.0,
+    "all_citations_locatable": true,
+    "rag_latency_max_seconds": 111.3
+  }
+}

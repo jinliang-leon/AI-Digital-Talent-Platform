@@ -1,0 +1,174 @@
+{
+  "purpose": "定位检索层与生成层；不替代端到端失败按0计分的原始验收口径",
+  "recall_at_5": 0.8166666666666667,
+  "questions": [
+    {
+      "question": "谁做过招聘API服务项目？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才05",
+        "虚构人才06",
+        "虚构人才04",
+        "虚构人才03",
+        "虚构人才02"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁有服务端接口开发和数据库缓存优化经历？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才01",
+        "虚构人才29",
+        "虚构人才03",
+        "虚构人才04",
+        "虚构人才05"
+      ],
+      "recall_at_5": 0.6666666666666666
+    },
+    {
+      "question": "谁做过用户行为分析报表项目？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才07",
+        "虚构人才09",
+        "虚构人才12",
+        "虚构人才10",
+        "虚构人才11"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁能从用户数据中提炼结论并制作可视化报表？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才07",
+        "虚构人才10",
+        "虚构人才12",
+        "虚构人才09",
+        "虚构人才08"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁做过电商平台前端项目？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才16",
+        "虚构人才13",
+        "虚构人才14",
+        "虚构人才18",
+        "虚构人才15"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁做过线上商店的页面和购物车交互？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才16",
+        "虚构人才15",
+        "虚构人才18",
+        "虚构人才14",
+        "虚构人才17"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁做过容器集群监控项目？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才20",
+        "虚构人才21",
+        "虚构人才24",
+        "虚构人才23",
+        "虚构人才22"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁有容器部署、系统监控和自动化运维经验？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才21",
+        "虚构人才20",
+        "虚构人才19",
+        "虚构人才24",
+        "虚构人才22"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁做过订单服务系统项目？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才30",
+        "虚构人才29",
+        "虚构人才27",
+        "虚构人才28",
+        "虚构人才25"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁参与过订单后端接口联调与性能优化？",
+      "answerable": true,
+      "retrieved_names": [
+        "虚构人才25",
+        "虚构人才28",
+        "虚构人才26",
+        "虚构人才30",
+        "虚构人才27"
+      ],
+      "recall_at_5": 0.8333333333333334
+    },
+    {
+      "question": "谁有量子纠错芯片流片经验？",
+      "answerable": false,
+      "retrieved_names": [
+        "虚构人才24",
+        "虚构人才20",
+        "虚构人才21",
+        "虚构人才22",
+        "虚构人才23"
+      ],
+      "recall_at_5": null
+    },
+    {
+      "question": "谁有深空激光通信硬件设计经历？",
+      "answerable": false,
+      "retrieved_names": [
+        "虚构人才23",
+        "虚构人才21",
+        "虚构人才20",
+        "虚构人才19",
+        "虚构人才24"
+      ],
+      "recall_at_5": null
+    },
+    {
+      "question": "谁做过自动驾驶激光雷达芯片量产？",
+      "answerable": false,
+      "retrieved_names": [],
+      "recall_at_5": null
+    },
+    {
+      "question": "谁参与过海底光缆铺设项目？",
+      "answerable": false,
+      "retrieved_names": [],
+      "recall_at_5": null
+    },
+    {
+      "question": "谁有心脏起搏器临床试验经验？",
+      "answerable": false,
+      "retrieved_names": [
+        "虚构人才09",
+        "虚构人才07",
+        "虚构人才24",
+        "虚构人才21",
+        "虚构人才19"
+      ],
+      "recall_at_5": null
+    }
+  ]
+}

@@ -6,4 +6,4 @@
 
 技术栈：Python / FastAPI / JWT / LangChain + LangGraph / MySQL / Neo4j / Milvus / Redis / MinIO / Docker。
 
-当前处于首版开发与真实模型验收阶段；测试及验收状态以仓库文档记录为准。本地 `.env` 存放凭据，不提交 Git。
+首版已可通过Docker运行，30份虚构简历和5个岗位就绪；71项自动化通过。真实模型质量与性能以[测试报告](文档/05_测试验收/测试报告.md)为准，整体验收尚未全部通过。本地 `.env` 存放凭据，不提交 Git。

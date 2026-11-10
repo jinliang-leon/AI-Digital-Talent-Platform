@@ -39,7 +39,9 @@ def main():
                 f"| {column.name} | {column.type.compile(dialect=mysql.dialect())} | {'是' if column.nullable else '否'} | {'；'.join(constraints)} |"
             )
         sections.append("")
-        for constraint in table.constraints:
+        for constraint in sorted(
+            table.constraints, key=lambda c: ",".join(column.name for column in c.columns)
+        ):
             if constraint.__class__.__name__ == "UniqueConstraint":
                 sections.append("唯一约束：" + ", ".join(c.name for c in constraint.columns) + "。")
         for index in sorted(table.indexes, key=lambda i: i.name):

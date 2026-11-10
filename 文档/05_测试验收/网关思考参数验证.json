@@ -1,0 +1,67 @@
+[
+  {
+    "parameters": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "status": 200,
+    "seconds": 4.27,
+    "finish_reason": "length",
+    "usage": {
+      "prompt_tokens": 2031,
+      "completion_tokens": 64,
+      "total_tokens": 2095
+    },
+    "message_fields": [
+      "content",
+      "reasoning_content",
+      "role",
+      "tool_calls"
+    ],
+    "content_chars": 0,
+    "reasoning_chars": 121
+  },
+  {
+    "parameters": {
+      "reasoning_effort": "none"
+    },
+    "status": 200,
+    "seconds": 4.19,
+    "finish_reason": "length",
+    "usage": {
+      "prompt_tokens": 2031,
+      "completion_tokens": 64,
+      "total_tokens": 2095
+    },
+    "message_fields": [
+      "content",
+      "reasoning_content",
+      "role",
+      "tool_calls"
+    ],
+    "content_chars": 0,
+    "reasoning_chars": 120
+  },
+  {
+    "parameters": {
+      "enable_thinking": false
+    },
+    "status": 200,
+    "seconds": 4.86,
+    "finish_reason": "length",
+    "usage": {
+      "prompt_tokens": 2031,
+      "completion_tokens": 64,
+      "total_tokens": 2095
+    },
+    "message_fields": [
+      "content",
+      "reasoning_content",
+      "role",
+      "tool_calls"
+    ],
+    "content_chars": 0,
+    "reasoning_chars": 124
+  }
+]

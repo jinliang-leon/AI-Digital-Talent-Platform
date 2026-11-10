@@ -106,7 +106,7 @@ chunk_id只使用给定S编号，输出紧凑JSON。"""
             "raw": model.json_call(
                 system,
                 {"question": state["question"], "sources": compact},
-                max_tokens=1600,
+                max_tokens=4096,
                 validator=validate,
             )
         }

@@ -104,3 +104,36 @@ def test_rag_invalid_citation_gets_one_controlled_repair_and_short_ids_resolve(m
         "谁有Python项目经历？", SOURCES, LanguageModel(Settings(llm_api_key="test-placeholder"))
     )
     assert result["answered"] is True and result["citations"][0]["chunk_id"] == "c1"
+
+
+def test_rag_budget_allows_reasoning_and_complete_grounded_json(monkeypatch):
+    import json
+    from langchain_core.messages import AIMessage
+    from langchain_core.runnables import RunnableLambda
+    from app.adapters.llm import LanguageModel
+    from app.config import Settings
+
+    complete = {
+        "answered": True,
+        "answer": "有Python项目经历",
+        "citations": [{"chunk_id": "S1", "quote": "Python招聘API服务"}],
+    }
+
+    def provider(**kwargs):
+        # 实际通道的1600上限耗尽后只有部分正文，finish_reason=length。
+        if kwargs["max_tokens"] < 3200:
+            return RunnableLambda(
+                lambda p: AIMessage(
+                    content='{"answered":true,"answer":"有Python项目经历",',
+                    response_metadata={"finish_reason": "length"},
+                )
+            )
+        return RunnableLambda(
+            lambda p: AIMessage(content=json.dumps(complete), response_metadata={"finish_reason": "stop"})
+        )
+
+    monkeypatch.setattr("app.adapters.llm.ChatOpenAI", provider)
+    result = answer_with_graph(
+        "谁有Python项目经历？", SOURCES, LanguageModel(Settings(llm_api_key="test-placeholder"))
+    )
+    assert result["answered"] and result["citations"][0]["chunk_id"] == "c1"

@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Python后端工程师",
+    "raw_jd": "岗位名称：Python后端工程师。技能要求：Python、FastAPI、MySQL、Redis、Docker。相关经验要求：36个月。项目要求：招聘API服务。工作内容：负责后端接口开发、数据库查询与缓存优化。",
+    "hard_conditions": {
+      "required_skills": [
+        "Python",
+        "FastAPI"
+      ],
+      "min_experience_months": 36,
+      "required_projects": []
+    },
+    "hard_confirmed": true,
+    "relevant_names": [
+      "虚构人才03",
+      "虚构人才04",
+      "虚构人才06"
+    ]
+  },
+  {
+    "title": "数据分析工程师",
+    "raw_jd": "岗位名称：数据分析工程师。技能要求：Python、SQL、Pandas、Power BI、Excel。相关经验要求：36个月。项目要求：用户行为分析报表。工作内容：负责用户行为分析、数据清洗与业务报表。",
+    "hard_conditions": {
+      "required_skills": [
+        "Python",
+        "SQL"
+      ],
+      "min_experience_months": 36,
+      "required_projects": []
+    },
+    "hard_confirmed": true,
+    "relevant_names": [
+      "虚构人才09",
+      "虚构人才10",
+      "虚构人才12"
+    ]
+  },
+  {
+    "title": "前端开发工程师",
+    "raw_jd": "岗位名称：前端开发工程师。技能要求：JavaScript、TypeScript、Vue、HTML、CSS。相关经验要求：36个月。项目要求：电商平台前端。工作内容：负责电商商品列表、购物车及用户界面开发。",
+    "hard_conditions": {
+      "required_skills": [
+        "JavaScript",
+        "TypeScript"
+      ],
+      "min_experience_months": 36,
+      "required_projects": []
+    },
+    "hard_confirmed": true,
+    "relevant_names": [
+      "虚构人才15",
+      "虚构人才16",
+      "虚构人才18"
+    ]
+  },
+  {
+    "title": "运维开发工程师",
+    "raw_jd": "岗位名称：运维开发工程师。技能要求：Linux、Docker、Kubernetes、Prometheus、Shell。相关经验要求：36个月。项目要求：容器集群监控。工作内容：负责容器集群部署、监控告警和运维脚本。",
+    "hard_conditions": {
+      "required_skills": [
+        "Linux",
+        "Docker"
+      ],
+      "min_experience_months": 36,
+      "required_projects": []
+    },
+    "hard_confirmed": true,
+    "relevant_names": [
+      "虚构人才21",
+      "虚构人才22",
+      "虚构人才24"
+    ]
+  },
+  {
+    "title": "Java后端工程师",
+    "raw_jd": "岗位名称：Java后端工程师。技能要求：Java、Spring Boot、MySQL、Redis、Maven。相关经验要求：36个月。项目要求：订单服务系统。工作内容：负责订单服务、接口联调和数据库性能优化。",
+    "hard_conditions": {
+      "required_skills": [
+        "Java",
+        "Spring Boot"
+      ],
+      "min_experience_months": 36,
+      "required_projects": []
+    },
+    "hard_confirmed": true,
+    "relevant_names": [
+      "虚构人才27",
+      "虚构人才28",
+      "虚构人才30"
+    ]
+  }
+]

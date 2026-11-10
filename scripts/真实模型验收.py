@@ -25,7 +25,7 @@ def field_equal(actual, expected):
     return actual == expected
 
 
-def main():
+def main(port=8088):
     root = Path(__file__).resolve().parents[1]
     labels = json.loads((root / "样例数据/验收标注.json").read_text(encoding="utf-8"))
     cfg = dotenv_values(root / ".env")
@@ -46,7 +46,7 @@ def main():
     def save():
         destination.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    with httpx.Client(base_url="http://127.0.0.1:8088", trust_env=False, timeout=130) as client:
+    with httpx.Client(base_url=f"http://127.0.0.1:{port}", trust_env=False, timeout=130) as client:
         response = client.post(
             "/api/v1/auth/login",
             json={"username": cfg["INITIAL_ADMIN_USERNAME"], "password": cfg["INITIAL_ADMIN_PASSWORD"]},
@@ -195,4 +195,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="冻结标注上的真实模型验收")
+    parser.add_argument("--port", type=int, choices=[8088, 8089], default=8088)
+    main(port=parser.parse_args().port)

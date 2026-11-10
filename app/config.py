@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     llm_base_url: str = "http://127.0.0.1:20128/v1"
     llm_model: str = "xingchen/spark-x2.6"
     llm_api_key: SecretStr = Field(repr=False)
-    llm_timeout_seconds: float = Field(default=45, gt=0, le=120)
+    llm_timeout_seconds: float = Field(default=90, gt=0, le=120)
     llm_thinking_mode: str = "disabled"
     embedding_base_url: str = "http://127.0.0.1:11434"
     embedding_model: str = "bge-m3:latest"

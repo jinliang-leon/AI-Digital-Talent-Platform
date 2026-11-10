@@ -75,3 +75,32 @@ def test_old_deleted_or_incomplete_hit_cannot_be_used():
     talent.revision = 2
     talent.deleted_at = "deleted"
     assert not is_current_hit(hit, chunk, talent)
+
+
+def test_rag_invalid_citation_gets_one_controlled_repair_and_short_ids_resolve(monkeypatch):
+    import json
+    from app.adapters.llm import LanguageModel
+    from app.config import Settings
+    from langchain_core.runnables import RunnableLambda
+
+    replies = iter(
+        [
+            {
+                "answered": True,
+                "answer": "有Python项目经历",
+                "citations": [{"chunk_id": "S999", "quote": "Python"}],
+            },
+            {
+                "answered": True,
+                "answer": "有Python项目经历",
+                "citations": [{"chunk_id": "S1", "quote": "Python招聘API服务"}],
+            },
+        ]
+    )
+    monkeypatch.setattr(
+        "app.adapters.llm.ChatOpenAI", lambda **kw: RunnableLambda(lambda p: json.dumps(next(replies)))
+    )
+    result = answer_with_graph(
+        "谁有Python项目经历？", SOURCES, LanguageModel(Settings(llm_api_key="test-placeholder"))
+    )
+    assert result["answered"] is True and result["citations"][0]["chunk_id"] == "c1"

@@ -133,7 +133,30 @@ def test_sdk_receives_explicit_timeout_and_configured_thinking_mode(monkeypatch)
         return RunnableLambda(lambda p: '{"ok":true}')
 
     monkeypatch.setattr("app.adapters.llm.ChatOpenAI", build)
-    LanguageModel(Settings(llm_api_key="test-placeholder")).json_call("返回JSON", {})
+    LanguageModel(Settings(llm_api_key="test-placeholder", llm_timeout_seconds=45)).json_call("返回JSON", {})
     assert captured[0].get("timeout") == 45
     assert captured[0]["max_retries"] == 0
     assert captured[0].get("extra_body") == {"thinking": {"type": "disabled"}}
+
+
+def test_short_model_source_id_round_trips_to_actual_chunk_without_inventing_sources(monkeypatch):
+    import json
+    from app.config import Settings
+    from app.adapters.llm import LanguageModel
+    from langchain_core.runnables import RunnableLambda
+
+    raw = {
+        "name": None,
+        "skills": ["Python"],
+        "experience_months": None,
+        "projects": [],
+        "experiences": [],
+        "education": [],
+        "evidence": [{"field": "skills", "value": "Python", "quote": "Python", "chunk_id": "C1"}],
+    }
+    monkeypatch.setattr("app.adapters.llm.ChatOpenAI", lambda **kw: RunnableLambda(lambda p: json.dumps(raw)))
+    actual_id = "19ca6388-f328-42ad-b19c-07341969cd23"
+    result = LanguageModel(Settings(llm_api_key="test-placeholder")).extract_resume(
+        [{"id": actual_id, "text": "技能：Python"}]
+    )
+    assert result["evidence"][0]["chunk_id"] == actual_id

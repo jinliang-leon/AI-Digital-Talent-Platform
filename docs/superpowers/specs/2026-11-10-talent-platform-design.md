@@ -1,7 +1,7 @@
 # AI数字化人才平台首版设计
 
 日期：2026-11-10（Asia/Shanghai）
-状态：待审阅；本文件不代表已批准开始实现。
+状态：需求访谈完成；Q1–Q10 均已确认。完整设计待审阅，本文件不代表已批准开始实现。
 需求来源：[需求基线](../../requirements.md)。
 
 ## 1. 目标、范围与完成条件
@@ -17,7 +17,7 @@
 
 ## 2. 已确认事项与工程选择
 
-用户确认：指定完整技术栈、网页交付、文本 PDF/DOCX、两种角色、演示样本规模、双向匹配和原文证据、对话网关与本地 Embedding。
+用户确认：指定完整技术栈、网页交付、文本 PDF/DOCX、两种角色、演示样本规模、双向匹配和原文证据、对话网关与本地 Embedding，以及 Q9 的需复核分组和 Q10 的事实编辑／备注分离规则。
 
 默认对话模型 Spark-X2.6 由用户明确指定。下文的模块边界、模板网页、数据表、匹配权重、错误策略和验收阈值是工程选择，随本设计一起审阅。
 
@@ -63,7 +63,7 @@ RQ worker 消费 Redis 任务，调用 LangGraph、对话网关与 Ollama，更�
 导航：人才库｜岗位管理｜智能检索｜处理任务；管理员额外有账号管理。
 
 人才库 → 上传 PDF/DOCX → 任务进度 → 档案详情（摘要、技能、经历、原文来源）→ 编辑／重建索引。
-岗位管理 → 新建 JD → 查看候选人排序 → 打开匹配解释与证据。
+岗位管理 → 新建 JD → HR 确认硬条件 → 分别查看匹配排序与“需复核”人选 → 打开匹配解释与证据。
 人才详情 → 推荐岗位，使用同一匹配规则。
 智能检索 → 输入问题 → 人才结果与带证据回答 → 打开引用原文／原文件。
 
@@ -98,7 +98,9 @@ RQ worker 消费 Redis 任务，调用 LangGraph、对话网关与 Ollama，更�
 | talents | id, name, summary, skills_json, experience_json, education_json, revision, active_document_id, index_status, deleted_at |
 | resume_documents | id, talent_id, original_name, object_key UNIQUE, sha256, mime_type, size_bytes, revision, status, extracted_text |
 | source_chunks | id, document_id, document_revision, chunk_no, text, page_no, paragraph_no, char_start, char_end；文档版本+序号唯一 |
-| extraction_evidence | id, talent_id, document_id, document_revision, field_path, chunk_id, quote, verification_status |
+| extraction_evidence | id, talent_id, document_id, document_revision, field_path, chunk_id, quote, origin（model_extracted/human_corrected）, verified_by, verification_status |
+| talent_revisions | id, talent_id, revision, document_id, document_revision, factual_snapshot_json, evidence_snapshot_json, actor_id, reason；talent_id+revision 唯一，不可变 |
+| talent_notes | id, talent_id, author_id, content, created_at, updated_at, deleted_at；独立于事实版本，不进入索引及模型上下文 |
 | tags / talent_tags | 标签名称唯一；人才与标签联合唯一 |
 | jobs | id, title, raw_jd, requirements_json, revision, status, created_by |
 | processing_tasks | id, task_type, entity_id, revision, state, stage, attempts, error_code, safe_error_message, started_at, finished_at |
@@ -110,6 +112,10 @@ RQ worker 消费 Redis 任务，调用 LangGraph、对话网关与 Ollama，更�
 - 任务查询索引：(state, updated_at)；同步重试索引：(state, next_attempt_at)。
 - SQL 外键、唯一约束负责完整性；上传大小与业务约束由服务层验证。
 - 原文件删除采用软删除工作流；权限校验先于签名下载链接生成。
+- 事实修改必须关联当前原文的证据定位；保存新的不可变人才快照并递增 revision。修改历史保留旧值、证据、操作者与时间。
+- 自由补充仅进入 talent_notes；序列化、向量切片、Neo4j 同步、评分与 RAG 读取采用事实字段白名单，不读取备注。
+- 重新解析生成新的事实版本，保留历史快照和独立备注；以前的人工纠正保存在历史中，不自动覆写新原文解析结果。
+- 人工标签用于管理与筛选，不作为已被简历证实的技能，不直接贡献技能匹配分。
 
 ### 6.1 Milvus
 
@@ -151,14 +157,19 @@ LangGraph 处理节点：
 
 ### 8.1 双向匹配
 
-先过滤启用、未删除、已就绪数据；只采用 HR 明确设置的岗位相关硬条件。
-缺失简历信息不推断满足硬条件，显示“未知／需确认”。
+先过滤启用、未删除、已就绪数据；只采用 HR 明确确认的岗位相关硬条件。
+JD 提取结果先作为建议；只有 HR 在表单中确认的条件才成为硬条件。首版支持必需技能、最低相关经历月数与必需项目要求；不从岗位描述自动加入隐含硬条件。
+每项条件取 PASS／FAIL／UNKNOWN：
+- 任一 FAIL：排除出推荐结果，并返回排除数量。
+- 无 FAIL 但存在 UNKNOWN：进入 needs_review 分组；显示缺失项与原文依据，不混入已满足条件的排名。
+- 全 PASS，或未设硬条件：进入 eligible 分组并排序。
+此规则在岗位找人才与人才找岗位两方向相同；未知不等于满足，也不直接丢弃。
 
 候选召回：Milvus 语义相似度；结合图中的技能交集和 MySQL 的经历／项目证据。
 为了让反向“人才找岗位”一致，最终统一执行 match(job, talent)，不反转两套独立评分。
 
 工程建议权重：技能覆盖 50%、经历／项目要求覆盖 30%、语义相关 20%。
-- 经历覆盖按岗位列出的可核查要求逐项计算；条件未指定或未知时标明状态，适用权重按规则重新归一化。
+- 经历覆盖按岗位列出的可核查要求逐项计算；未指定要求时移除该项并重新归一化适用权重；已指定但缺乏证据的要求不计满足，展示缺口或未知状态。硬条件未知者保持在 needs_review 分组。
 - 语义分使用校准后的相关指标；不能把原始余弦相似度直接标作“录用概率”。
 - 初版不让大模型直接自由打总分；数值评分由版本化规则计算，模型只整理受约束的解释。
 - 展示分项、证据、缺口和未知信息；不使用性别、年龄、婚育等属性评分。
@@ -194,18 +205,22 @@ LangGraph 处理节点：
 | GET, PATCH, DELETE /talents/{id} | 档案、编辑触发重建、软删除 |
 | GET /resumes/{id}/download | 权限校验后短期签名 URL |
 | GET /talents/{id}/evidence | 当前版本字段的原文依据 |
+| GET /talents/{id}/revisions | 分页查看事实版本与修改来源 |
+| GET, POST /talents/{id}/notes | 独立 HR 备注；返回明确的“未进入匹配／检索”标记 |
 | GET, POST /tags | 列出／创建标签 |
 | PUT /talents/{id}/tags | 设置关联标签 |
 | GET, POST /jobs | 查岗位／创建 JD 与处理任务 |
 | GET, PATCH /jobs/{id} | 查岗位／编辑后重建与缓存失效 |
-| POST /jobs/{id}/matches | 岗位找人才；版本化分项与证据 |
-| POST /talents/{id}/job-matches | 人才找岗位；相同评分语义 |
+| POST /jobs/{id}/matches | 岗位找人才；eligible、needs_review 两组，分项／证据及 excluded_count |
+| POST /talents/{id}/job-matches | 人才找岗位；相同分组、硬条件判定和评分语义 |
 | POST /search | question、filters；回答、人才结果、引用 |
 | GET /health/live, /health/ready | 进程存活／依赖就绪，不泄露配置 |
 | GET /admin/integrations/status | 管理员查看脱敏后的依赖状态 |
 
 创建／修改接口使用请求 DTO，禁止直接把 SQL 模型批量赋值；防止请求修改 is_active、role 等未授权字段。
 匹配、检索在依赖不可用时返回明确 503／处理中状态，不用假数据冒充真实结果。
+档案修改 DTO 包含 base_revision、field_changes 及 evidence_refs；陈旧 revision 返回 409。备注端点只修改独立备注，不重建事实索引。首版备注创建后保留审计，不提供物理删除接口。
+匹配响应示例结构：{eligible: [...], needs_review: [...], excluded_count: 0, versions: {...}}，需复核项包含 unknown_conditions。
 接口示例与完整 OpenAPI Schema 在实现阶段由 FastAPI 导出并纳入验收。
 
 ## 10. 本机接入事实与配置约定
@@ -244,6 +259,8 @@ LLM_API_KEY 不进入 README、日志、任务、客户端或数据库；错误�
 | 检索 | 至少 15 个有答案／无答案问题；可回答问题的人才 Recall@5 目标 ≥0.8；全部引用可定位；无依据问题不编造 |
 | 鉴权 | HR 访问管理员 API 返回 403；失效／过期 JWT 被拒；停用与降权生效；下载接口也受保护 |
 | 一致性 | 任务重复投递不重复建档；编辑后旧版本不出现在正常结果；部分入库失败可重试恢复 |
+| 硬条件 | PASS 正常排序、FAIL 排除、UNKNOWN 进入需复核；双向判定一致 |
+| 人工编辑 | 无证据的事实修改被拒绝；备注不进入索引／评分／RAG；重新解析保留备注及历史快照；并发旧版本修改返回 409 |
 | 失败可见 | 模型／Milvus／Neo4j 不可用、队列失败、任务超时有真实错误状态 |
 | 性能 | 首版并发 1；上传入队通常 ≤3 秒；单份简历完成目标 ≤120 秒；RAG 目标 ≤30 秒，均在本机记录实测而不预先宣称通过 |
 | 部署 | 新应用容器可访问本地 MySQL、网关、Ollama 及全部存储；提供迁移、初始化、启动与验收说明 |
@@ -255,12 +272,12 @@ LLM_API_KEY 不进入 README、日志、任务、客户端或数据库；错误�
 
 质量阈值是拟定验收标准，需通过本设计审阅；不达标时报告实际结果与原因，不临时降低标准隐藏失败。
 
-## 12. 审阅中待确认的业务边界
+## 12. 需求审阅结论
 
-以下仅为建议，尚不能记作用户已同意；确认后更新相关表结构、流程与验收项。
-
-1. 硬条件：明确不满足者排除；信息缺失者保留在“需复核”分组，不推断满足，也不混入已确认满足条件的排序。
-2. 人工编辑：允许纠正有原文依据的解析字段，并绑定证据；自由补充内容另存“HR 备注”，首版不进入匹配与 RAG 事实证据。重新解析重建事实字段，保留独立的 HR 备注，变更可追溯。
+Q1–Q10 已经用户确认，默认对话模型另由用户指定为 Spark-X2.6。
+最后两项决定已落实到页面流程、数据表、版本规则、接口分组与验收项，不再作为未决业务问题。
+模块化单体 + worker、Jinja2/HTMX 网页、规则评分权重与验收阈值仍是需要随完整设计审阅的工程选择。
+本设计整体确认后，下一阶段先产出详细开发计划及 TODO，再实施。
 
 ## 13. 实施顺序与阶段产物
 

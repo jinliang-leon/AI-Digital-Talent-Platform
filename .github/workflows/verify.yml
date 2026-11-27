@@ -1,0 +1,131 @@
+name: Verify talent platform
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    name: Application and OCR
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install document and test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-sim
+          python -m pip install -r requirements-core.txt -r requirements-test.txt -r requirements-resume.txt
+          python -c 'import pypdfium2'
+          tesseract --list-langs | grep -Fx eng
+          tesseract --list-langs | grep -Fx chi_sim
+      - name: Verify application and frontend
+        run: |
+          python -m pytest -q -p no:cacheprovider -rs
+          npm --prefix frontend run check
+      - name: Run DeepEval exact-match regression on the fixed dataset
+        env:
+          DEEPEVAL_TELEMETRY_OPT_OUT: '1'
+        run: |
+          python -m pip install -r requirements-eval.txt
+          python scripts/evaluate_offline.py --deepeval
+
+  compose:
+    name: PostgreSQL, pgvector, Redis and MinIO
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare synthetic integration environment
+        run: |
+          python -m pip install -r requirements-core.txt -r requirements-test.txt
+          python scripts/setup_env.py --profile compose
+          docker compose config --quiet
+      - name: Build and start Compose
+        run: |
+          docker compose up -d --build --wait --wait-timeout 180
+          docker compose exec -T api python -m backend.app.cli seed
+      - name: Verify migrations, readiness and business flows
+        run: |
+          docker compose exec -T api python -m alembic check
+          python scripts/smoke_phase_one.py --require-compose
+          python scripts/smoke_resume.py
+      - name: Verify persisted pgvector index data
+        run: |
+          test "$(docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U talent -d talent -Atc \
+            "SELECT EXISTS (SELECT 1 FROM resume_chunks WHERE vector_dims(embedding) = 256 AND embedding <=> embedding < 0.000001)")" = t
+      - name: Report service states
+        if: always()
+        run: docker compose ps -a
+      - name: Remove ephemeral services and volumes
+        if: always()
+        run: docker compose down -v
+
+  rag-judge:
+    name: DeepEval RAG on synthetic knowledge
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      DEEPEVAL_TELEMETRY_OPT_OUT: '1'
+      DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE: '90'
+      TALENT_EXTERNAL_AI_ENABLED: 'true'
+      TALENT_MODEL_URL: http://127.0.0.1:11434/v1
+      TALENT_MODEL_API_KEY: ollama-local-placeholder
+      TALENT_CHAT_MODEL: qwen2.5:3b
+      TALENT_MODEL_TIMEOUT_SECONDS: '95'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install evaluation dependencies
+        run: python -m pip install -r requirements-core.txt -r requirements-eval.txt
+      - name: Start local model service
+        run: |
+          docker run -d --name talent-eval-ollama -p 127.0.0.1:11434:11434 ollama/ollama:0.13.5
+          docker exec talent-eval-ollama ollama pull qwen2.5:3b
+          docker exec talent-eval-ollama ollama pull qwen2.5:7b
+      - name: Evaluate real RAG responses
+        run: |
+          python scripts/setup_env.py --profile local
+          python -m backend.app.cli migrate
+          python -m backend.app.cli seed
+          python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 18000 > /tmp/talent-eval-api.log 2>&1 &
+          api_pid=$!
+          trap 'kill "$api_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --retry 12 --retry-connrefused http://127.0.0.1:18000/health/ready > /dev/null
+          python scripts/evaluate_recruitment.py --url http://127.0.0.1:18000 \
+            --judge-model qwen2.5:7b --judge-ollama-url http://127.0.0.1:11434 --report .runtime/rag-evaluation.json
+      - name: Upload sanitized evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-rag-evaluation
+          path: .runtime/rag-evaluation.json
+          include-hidden-files: true
+          if-no-files-found: ignore
+      - name: Stop local model service
+        if: always()
+        run: |
+          if docker container inspect talent-eval-ollama >/dev/null 2>&1; then
+            docker rm -f talent-eval-ollama
+          fi

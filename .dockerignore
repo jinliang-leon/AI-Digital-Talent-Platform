@@ -1,0 +1,13 @@
+**
+!backend
+!backend/**
+!frontend
+!frontend/**
+!infra
+!infra/**
+!alembic.ini
+!requirements*.txt
+**/.env*
+**/__pycache__
+**/node_modules
+**/*.py[cod]

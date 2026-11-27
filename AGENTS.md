@@ -9,6 +9,10 @@
 
 ## 不可擅自变更的约束
 
+v0.2 以用户确认继续交付的当前实现为准，保留 Python、FastAPI、JWT 鉴权、HR 演示用途、原文证据、敏感数据控制及 Docker 部署目标。轻量模式使用 SQLite、本地文件和 SQL worker。Compose 目标使用 PostgreSQL、pgvector、Redis、MinIO 和 SQL worker。AI 编排使用 Python 显式流程，模型由环境配置；前端为原生 JavaScript 与 Node 同源代理。实际架构及验收状态见 [README](README.md)。
+
+以下技术与实施顺序记录于首版设计，适用于首版历史分支。后续调整应以明确授权为准，并同步维护架构文档。
+
 - Python、FastAPI、JWT 鉴权、MVC 架构。
 - LangChain + LangGraph。
 - 用户本地 MySQL、Neo4j、Milvus、Redis、MinIO。

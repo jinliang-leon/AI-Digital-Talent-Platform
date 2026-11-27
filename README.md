@@ -159,7 +159,7 @@ python scripts/smoke_phase_one.py --require-compose
 python scripts/evaluate_recruitment.py --judge-model qwen2.5:7b --judge-ollama-url http://127.0.0.1:11434 --report .runtime/rag-evaluation.json
 ```
 
-GitHub CI 的评审模型与回答模型使用同一 Ollama 模型。小样本结果用于复验流程及回归，统计范围见 [11_开发进度与问题记录.md](docs/11_开发进度与问题记录.md)。
+GitHub CI 使用 Qwen2.5 3B 生成答案，使用 7B 进行独立评分。小样本结果用于复验流程及回归，统计范围见 [11_开发进度与问题记录.md](docs/11_开发进度与问题记录.md)。
 
 ## 可观测性、评估与验收状态
 

@@ -14,6 +14,10 @@ from backend.app.core.config import configuration
 FIXTURE = Path(__file__).resolve().parents[1] / "datasets" / "synthetic" / "evaluation.json"
 
 
+def without_fixture_label(value):
+    return value.removeprefix("SYNTHETIC：").strip()
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:5173")
@@ -34,7 +38,8 @@ def main():
     if args.judge_ollama_url:
         from deepeval.models import OllamaModel
 
-        model = OllamaModel(model=args.judge_model, base_url=args.judge_ollama_url, temperature=0)
+        model = OllamaModel(model=args.judge_model, base_url=args.judge_ollama_url, temperature=0,
+                            generation_kwargs={"num_predict": 384})
 
     results = []
     dataset = json.loads(FIXTURE.read_text(encoding="utf-8"))
@@ -59,19 +64,28 @@ def main():
             context = [source["quote"] for source in sources]
             result = post(path + "/answer", {"query": question})
             quotes = [citation["quote"] for citation in result["citations"]]
-            if not quotes or gold not in context or any(quote not in gold for quote in quotes):
-                print(f"FAIL fixture={ordinal} prerequisite=grounded_evidence")
-                results.append({"case": ordinal, "metric": "grounded_evidence", "passed": False})
+            grounded = bool(quotes) and gold in context and all(quote in gold for quote in quotes)
+            results.append({"case": ordinal, "metric": "grounded_evidence", "passed": grounded})
+            if not grounded:
+                print(f"FAIL fixture={ordinal} prerequisite=grounded_evidence", flush=True)
                 continue
-            case = LLMTestCase(input=question, actual_output="\n".join(quotes), expected_output=gold,
-                               retrieval_context=context)
+            case = LLMTestCase(input=question, actual_output="\n".join(map(without_fixture_label, quotes)),
+                               expected_output=without_fixture_label(gold),
+                               retrieval_context=list(map(without_fixture_label, context)))
             for metric_class in (FaithfulnessMetric, AnswerRelevancyMetric):
                 metric = metric_class(model=model, threshold=.8, async_mode=False)
-                metric.measure(case)
+                try:
+                    metric.measure(case)
+                except Exception as exc:
+                    print(f"ERROR fixture={ordinal} metric={metric_class.__name__} type={type(exc).__name__}", flush=True)
+                    results.append({"case": ordinal, "metric": metric_class.__name__, "passed": False,
+                                    "error_type": type(exc).__name__})
+                    continue
                 successful = metric.is_successful()
                 print(f"{'PASS' if successful else 'FAIL'} fixture={ordinal} "
-                      f"metric={metric_class.__name__} score={metric.score}")
-                results.append({"case": ordinal, "metric": metric_class.__name__, "score": metric.score, "passed": successful})
+                      f"metric={metric_class.__name__} score={metric.score}", flush=True)
+                results.append({"case": ordinal, "metric": metric_class.__name__, "score": metric.score,
+                                "passed": successful, "reason": metric.reason})
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps({"dataset": dataset["dataset"], "judge": args.judge_model,

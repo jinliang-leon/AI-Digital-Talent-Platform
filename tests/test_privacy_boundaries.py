@@ -134,7 +134,7 @@ def test_rag_projections_permissions_and_grounded_model_output(client, headers, 
         sources = data["sources"]
         assert len(sources) == 1 and sources[0]["quote"] == PROFESSIONAL
         assert set(sources[0]) == {"reference_id", "quote"}
-        return schema(citations=[{"reference_id": sources[0]["reference_id"], "quote": PROFESSIONAL}])
+        return schema(citations=[sources[0]["reference_id"]])
 
     monkeypatch.setattr(knowledge, "invoke", answer)
     response = client.post(uri + "/answer", headers=hr, json=query)
@@ -144,7 +144,7 @@ def test_rag_projections_permissions_and_grounded_model_output(client, headers, 
     assert denied["id"] != doc.json()["id"]
 
     def invalid_answer(settings, trace, name, schema, instructions, data):
-        return schema(citations=[{"reference_id": data["sources"][0]["reference_id"], "quote": EMAIL}])
+        return schema(citations=[len(data["sources"]) + 1])
 
     monkeypatch.setattr(knowledge, "invoke", invalid_answer)
     response = client.post(uri + "/answer", headers=hr, json=query)

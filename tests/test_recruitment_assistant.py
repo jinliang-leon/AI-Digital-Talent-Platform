@@ -72,7 +72,7 @@ def test_knowledge_access_citations_and_versions(client, headers, monkeypatch):
     def fake_answer(settings, trace, name, schema, system, data):
         assert schema is GroundedAnswer and data["sources"][0]["quote"] == text
         reference = data["sources"][0]["reference_id"]
-        return schema.model_validate({"citations": [{"quote": text, "reference_id": reference}]})
+        return schema.model_validate({"citations": [reference]})
 
     monkeypatch.setattr(knowledge, "invoke", fake_answer)
     result = client.post(path + "/answer", headers=hr, json=answer)
@@ -80,7 +80,7 @@ def test_knowledge_access_citations_and_versions(client, headers, monkeypatch):
     assert result.json()["citations"][0]["quote"] == text
 
     def invented(*args):
-        return GroundedAnswer.model_validate({"citations": [{"quote": text, "reference_id": "missing"}]})
+        return GroundedAnswer.model_validate({"citations": [999]})
 
     monkeypatch.setattr(knowledge, "invoke", invented)
     assert client.post(path + "/answer", headers=hr, json=answer).status_code == 502

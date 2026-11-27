@@ -2,6 +2,7 @@
 import argparse
 import json
 from pathlib import Path
+import re
 import sys
 from uuid import uuid4
 
@@ -41,13 +42,12 @@ def main():
         model = OllamaModel(model=args.judge_model, base_url=args.judge_ollama_url, temperature=0,
                             generation_kwargs={"num_predict": 384})
 
-    results = []
+    results, cases = [], []
     dataset = json.loads(FIXTURE.read_text(encoding="utf-8"))
     with httpx.Client(base_url=args.url + "/api/v1/", timeout=125, trust_env=False) as web:
         def post(path, data):
             response = web.post(path, json=data)
-            if not response.is_success:
-                raise RuntimeError(f"{path}: HTTP {response.status_code}")
+            response.raise_for_status()
             return response.json()
 
         auth = post("auth/login", {"username": "hr", "password": config["TALENT_DEMO_PASSWORD"]})
@@ -62,7 +62,24 @@ def main():
                                        "model_authorized": True})
             sources = post(path + "/search", {"query": question})["items"]
             context = [source["quote"] for source in sources]
-            result = post(path + "/answer", {"query": question})
+            try:
+                result = post(path + "/answer", {"query": question})
+            except httpx.HTTPStatusError as exc:
+                response = exc.response
+                try:
+                    message = response.json().get("message")
+                except (ValueError, AttributeError):
+                    message = None
+                code = message if isinstance(message, str) and re.fullmatch(r"(?:MODEL|RAG|AI)_[A-Z_]{1,70}", message) else None
+                results.append({"case": ordinal, "metric": "grounded_evidence", "passed": False,
+                                "http_status": response.status_code, "error_code": code})
+                print(f"ERROR fixture={ordinal} status={response.status_code} code={code or 'UNAVAILABLE'}", flush=True)
+                continue
+            except httpx.TransportError as exc:
+                results.append({"case": ordinal, "metric": "grounded_evidence", "passed": False,
+                                "error_type": type(exc).__name__})
+                print(f"ERROR fixture={ordinal} type={type(exc).__name__}", flush=True)
+                continue
             quotes = [citation["quote"] for citation in result["citations"]]
             grounded = bool(quotes) and gold in context and all(quote in gold for quote in quotes)
             results.append({"case": ordinal, "metric": "grounded_evidence", "passed": grounded})
@@ -72,24 +89,28 @@ def main():
             case = LLMTestCase(input=question, actual_output="\n".join(map(without_fixture_label, quotes)),
                                expected_output=without_fixture_label(gold),
                                retrieval_context=list(map(without_fixture_label, context)))
-            for metric_class in (FaithfulnessMetric, AnswerRelevancyMetric):
-                metric = metric_class(model=model, threshold=.8, async_mode=False)
-                try:
-                    metric.measure(case)
-                except Exception as exc:
-                    print(f"ERROR fixture={ordinal} metric={metric_class.__name__} type={type(exc).__name__}", flush=True)
-                    results.append({"case": ordinal, "metric": metric_class.__name__, "passed": False,
-                                    "error_type": type(exc).__name__})
-                    continue
-                successful = metric.is_successful()
-                print(f"{'PASS' if successful else 'FAIL'} fixture={ordinal} "
-                      f"metric={metric_class.__name__} score={metric.score}", flush=True)
-                results.append({"case": ordinal, "metric": metric_class.__name__, "score": metric.score,
-                                "passed": successful, "reason": metric.reason})
+            cases.append((ordinal, case))
+
+    for ordinal, case in cases:
+        for metric_class in (FaithfulnessMetric, AnswerRelevancyMetric):
+            metric = metric_class(model=model, threshold=.8, async_mode=False)
+            try:
+                metric.measure(case)
+            except Exception as exc:
+                print(f"ERROR fixture={ordinal} metric={metric_class.__name__} type={type(exc).__name__}", flush=True)
+                results.append({"case": ordinal, "metric": metric_class.__name__, "passed": False,
+                                "error_type": type(exc).__name__})
+                continue
+            successful = metric.is_successful()
+            print(f"{'PASS' if successful else 'FAIL'} fixture={ordinal} "
+                  f"metric={metric_class.__name__} score={metric.score}", flush=True)
+            results.append({"case": ordinal, "metric": metric_class.__name__, "score": metric.score,
+                            "passed": successful, "reason": metric.reason})
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps({"dataset": dataset["dataset"], "judge": args.judge_model,
-                                           "results": results}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                                           "generator": config.get("TALENT_CHAT_MODEL"),
+                                           "results": sorted(results, key=lambda row: row["case"])}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return int(not all(result["passed"] for result in results))
 
 

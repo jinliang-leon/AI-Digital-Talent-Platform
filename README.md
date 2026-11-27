@@ -145,20 +145,28 @@ python scripts/smoke_resume.py
 python scripts/smoke_resume.py --real-model
 python scripts/smoke_assistant.py
 python scripts/benchmark_recruitment.py
+python scripts/evaluate_offline.py --report .runtime/evaluation-offline.json
+python scripts/evaluate_offline.py --live-extraction --report .runtime/evaluation-live.json
 # 正式 Compose 依赖验收
 python scripts/smoke_phase_one.py --require-compose
 ```
 
-冒烟脚本通过 Web 代理访问正在运行的 API，写入明确标记的合成验收记录。DeepEval 验收需要安装 `requirements-eval.txt`，配置评审模型后执行 `python scripts/evaluate_recruitment.py --judge-model <模型标识>`。阶段进度与当前问题记录在 [11_开发进度与问题记录.md](docs/11_开发进度与问题记录.md)。
+冒烟脚本通过 Web 代理访问正在运行的 API，写入明确标记的合成验收记录。[固定评估集](datasets/synthetic/evaluation.json) 覆盖中英文简历、引文、候选人相关性、PII、文档指令和工具契约。安装 `requirements-eval.txt` 后可用 `python scripts/evaluate_offline.py --deepeval` 执行 DeepEval ExactMatch。RAG 忠实度和相关性需要启动真实模型 API，并执行以下命令。
+
+```powershell
+python scripts/evaluate_recruitment.py --judge-model qwen2.5:7b --judge-ollama-url http://127.0.0.1:11434 --report .runtime/rag-evaluation.json
+```
+
+GitHub CI 的评审模型与回答模型使用同一 Ollama 模型。小样本结果用于复验流程及回归，统计范围见 [11_开发进度与问题记录.md](docs/11_开发进度与问题记录.md)。
 
 ## 可观测性、评估与验收状态
 
 | 项目 | 实测或待验收范围 |
 | --- | --- |
 | 招聘业务与 AI | 本地通过招聘闭环、任务重试、原文审核、向量检索、RAG、面试提纲和 ChatAI 工具调用。真实模型验收使用本机 Ollama 和合成数据 |
-| 自动化测试 | Windows 环境 42 项通过、5 项跳过，涉及 PDFium 和真实 Tesseract OCR 的测试需要环境依赖 |
+| 自动化测试 | Windows 环境 42 项通过、5 项跳过。Linux CI 已通过 47 项，包括真实 PDFium 和 Tesseract OCR |
 | Langfuse | OTLP 输出和脱敏字段通过测例。真实项目接收需部署环境配置凭据 |
-| DeepEval | RAG 忠实度与相关性的评估入口已提交。评审模型和依赖就绪后执行真实评估 |
+| DeepEval | CI 执行固定集 ExactMatch 和真实 RAG 的评审任务，最新结果见 PR Checks |
 | Compose | 静态配置与 PostgreSQL 迁移 SQL 已验证。Docker Desktop Linux 引擎访问受限，待验真实 PostgreSQL、pgvector、Redis、MinIO |
 
 开发记录中的指标均来自注明的本地合成测试环境。

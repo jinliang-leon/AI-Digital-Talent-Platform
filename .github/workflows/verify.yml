@@ -35,6 +35,12 @@ jobs:
         run: |
           python -m pytest -q -p no:cacheprovider -rs
           npm --prefix frontend run check
+      - name: Run DeepEval exact-match regression on the fixed dataset
+        env:
+          DEEPEVAL_TELEMETRY_OPT_OUT: 'YES'
+        run: |
+          python -m pip install -r requirements-eval.txt
+          python scripts/evaluate_offline.py --deepeval
 
   compose:
     name: PostgreSQL, pgvector, Redis and MinIO
@@ -67,3 +73,52 @@ jobs:
       - name: Remove ephemeral services and volumes
         if: always()
         run: docker compose down -v
+
+  rag-judge:
+    name: DeepEval RAG on synthetic knowledge
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      DEEPEVAL_TELEMETRY_OPT_OUT: 'YES'
+      TALENT_EXTERNAL_AI_ENABLED: 'true'
+      TALENT_MODEL_URL: http://127.0.0.1:11434/v1
+      TALENT_MODEL_API_KEY: ollama-local-placeholder
+      TALENT_CHAT_MODEL: qwen2.5:3b
+      TALENT_MODEL_TIMEOUT_SECONDS: '95'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install evaluation dependencies
+        run: python -m pip install -r requirements-core.txt -r requirements-eval.txt
+      - name: Start local model service
+        run: |
+          docker run -d --name talent-eval-ollama -p 127.0.0.1:11434:11434 ollama/ollama:0.13.5
+          docker exec talent-eval-ollama ollama pull qwen2.5:3b
+      - name: Evaluate real RAG responses
+        run: |
+          python scripts/setup_env.py --profile local
+          python -m backend.app.cli migrate
+          python -m backend.app.cli seed
+          python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 18000 > /tmp/talent-eval-api.log 2>&1 &
+          api_pid=$!
+          trap 'kill "$api_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --retry 12 --retry-connrefused http://127.0.0.1:18000/health/ready > /dev/null
+          python scripts/evaluate_recruitment.py --url http://127.0.0.1:18000 \
+            --judge-model qwen2.5:3b --judge-ollama-url http://127.0.0.1:11434 --report .runtime/rag-evaluation.json
+      - name: Upload sanitized evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-rag-evaluation
+          path: .runtime/rag-evaluation.json
+          if-no-files-found: ignore
+      - name: Stop local model service
+        if: always()
+        run: |
+          if docker container inspect talent-eval-ollama >/dev/null 2>&1; then
+            docker rm -f talent-eval-ollama
+          fi

@@ -1,0 +1,5 @@
+# Optional resume document processing dependencies. OCR uses the system Tesseract binary.
+defusedxml>=0.7.1,<1
+pypdfium2>=4.30,<6
+Pillow>=11,<13
+httpx>=0.27,<1

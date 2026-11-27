@@ -115,6 +115,7 @@ jobs:
         with:
           name: synthetic-rag-evaluation
           path: .runtime/rag-evaluation.json
+          include-hidden-files: true
           if-no-files-found: ignore
       - name: Stop local model service
         if: always()

@@ -166,7 +166,7 @@ GitHub CI 的评审模型与回答模型使用同一 Ollama 模型。小样本�
 | 项目 | 实测或待验收范围 |
 | --- | --- |
 | 招聘业务与 AI | 本地通过招聘闭环、任务重试、原文审核、向量检索、RAG、面试提纲和 ChatAI 工具调用。真实模型验收使用本机 Ollama 和合成数据 |
-| 自动化测试 | Windows 环境 43 项通过、5 项因依赖跳过。Linux CI 实测覆盖真实 PDFium 和 Tesseract OCR |
+| 自动化测试 | Windows 环境 43 项通过、5 项因依赖跳过。Linux CI 48 项通过，包括真实 PDFium 和 Tesseract OCR |
 | Langfuse | OTLP 输出和脱敏字段通过测例。真实项目接收需部署环境配置凭据 |
 | DeepEval | CI 执行固定集 ExactMatch 和真实 RAG 的评审任务，最新结果见 PR Checks |
 | Compose | Linux CI 已通过 PostgreSQL、pgvector、Redis、MinIO 就绪检查、Alembic 一致性和真实招聘及简历冒烟。Windows Docker Desktop Linux 引擎仍访问受限 |

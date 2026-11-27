@@ -52,14 +52,19 @@ def main():
             scope = post("knowledge-bases", {"title": "SYNTHETIC DeepEval " + uuid4().hex[:8]})
             path = "knowledge-bases/" + scope["id"]
             post(path + "/documents", {"title": "SYNTHETIC evaluation", "text": gold, "model_authorized": True})
+            post(path + "/documents", {"title": "SYNTHETIC distractor",
+                                       "text": "SYNTHETIC：访客到达前台后应登记。",
+                                       "model_authorized": True})
+            sources = post(path + "/search", {"query": question})["items"]
+            context = [source["quote"] for source in sources]
             result = post(path + "/answer", {"query": question})
             quotes = [citation["quote"] for citation in result["citations"]]
-            if not quotes or any(quote not in gold for quote in quotes):
+            if not quotes or gold not in context or any(quote not in gold for quote in quotes):
                 print(f"FAIL fixture={ordinal} prerequisite=grounded_evidence")
                 results.append({"case": ordinal, "metric": "grounded_evidence", "passed": False})
                 continue
             case = LLMTestCase(input=question, actual_output="\n".join(quotes), expected_output=gold,
-                               retrieval_context=[gold])
+                               retrieval_context=context)
             for metric_class in (FaithfulnessMetric, AnswerRelevancyMetric):
                 metric = metric_class(model=model, threshold=.8, async_mode=False)
                 metric.measure(case)

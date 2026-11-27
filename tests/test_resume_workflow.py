@@ -1,3 +1,5 @@
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 
 from sqlalchemy.orm import Session
@@ -85,3 +87,32 @@ def test_expired_worker_lease_can_be_reclaimed(client, headers):
     process(state.engine, state.storage, state.settings, *second_claim)
     status = client.get(task_url, headers=hr).json()
     assert status["status"] == "succeeded" and status["attempts"] == 2
+
+
+def test_concurrent_batch_intake_isolates_duplicates_and_invalid_files(client, headers):
+    hr = headers["hr"]
+    batch = client.post("/api/v1/resume-batches", headers=hr, json={"synthetic": True}).json()["id"]
+    base = "/api/v1/resume-batches/" + batch
+    valid = [(f"sample-{i}.txt", f"SYNTHETIC concurrent batch document {i}".encode()) for i in range(12)]
+    copies = [(f"copy-{i}.txt", valid[i][1]) for i in range(4)]
+    inputs = valid + copies + [("invalid.png", b"not a PNG")]
+
+    def upload(item):
+        name, payload = item
+        response = client.post(base + "/files", params={"filename": name}, content=payload,
+                               headers={**hr, "Content-Type": "application/octet-stream"})
+        assert response.status_code == 202, response.text
+        return response.json()
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        accepted = list(pool.map(upload, inputs))
+
+    assert Counter(item["status"] for item in accepted) == {"queued": 12, "duplicate": 4, "rejected": 1}
+    canonical_ids = {item["id"] for item in accepted if item["status"] == "queued"}
+    assert all(item["duplicate_id"] in canonical_ids for item in accepted if item["status"] == "duplicate")
+    state = client.app.state
+    for _ in canonical_ids:
+        assert run_once(state.engine, state.storage, state.settings)
+    assert not run_once(state.engine, state.storage, state.settings)
+    finalized = client.get(base, headers=hr).json()["uploads"]
+    assert Counter(item["status"] for item in finalized) == {"review_pending": 12, "duplicate": 4, "rejected": 1}

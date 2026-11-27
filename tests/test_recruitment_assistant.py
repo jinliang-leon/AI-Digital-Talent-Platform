@@ -162,7 +162,7 @@ def test_langfuse_export_contains_only_span_metadata(monkeypatch):
         with trace.step("resume.structured_extract", model="example", prompt_tokens=32,
                         query="person@example.invalid"):
             pass
-    trace.flush()
+    assert trace.flush()
     url, data = calls[0]
     assert url.endswith("/api/public/otel/v1/traces")
     assert data["headers"]["x-langfuse-ingestion-version"] == "4"
@@ -171,3 +171,10 @@ def test_langfuse_export_contains_only_span_metadata(monkeypatch):
     assert spans[1]["parentSpanId"] == spans[2]["spanId"]
     assert {item["key"] for item in spans[1]["attributes"]} == {"talent.model", "talent.prompt_tokens"}
     assert "person@example.invalid" not in json.dumps(data["json"])
+
+    def reject_spans(url, **kwargs):
+        return httpx.Response(200, request=httpx.Request("POST", url),
+                              json={"partialSuccess": {"rejectedSpans": "1"}})
+
+    monkeypatch.setattr(tracing.httpx, "post", reject_spans)
+    assert not trace.flush()

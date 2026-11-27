@@ -59,11 +59,11 @@ class Trace:
     def flush(self):
         settings = self.settings
         if not self.spans or not (settings.langfuse_url and settings.langfuse_public_key and settings.langfuse_secret_key):
-            return
+            return False
         url = urlsplit(settings.langfuse_url)
         if url.scheme != "https" or not url.hostname or url.username or url.password or url.query or url.fragment:
             logger.warning("Langfuse endpoint configuration invalid")
-            return
+            return False
         try:
             root_id = uuid4().hex[:16]
             root = {"traceId": self.trace_id, "spanId": root_id, "name": "talent.workflow", "kind": 1,
@@ -79,5 +79,12 @@ class Trace:
                         "scopeSpans": [{"spans": spans}]}]}, timeout=4, follow_redirects=False,
             )
             response.raise_for_status()
-        except httpx.HTTPError as exc:
+            if response.content:
+                partial = response.json().get("partialSuccess") or {}
+                if int(partial.get("rejectedSpans", 0)):
+                    logger.warning("Langfuse rejected spans trace=%s", self.trace_id)
+                    return False
+            return True
+        except (httpx.HTTPError, ValueError, TypeError, AttributeError) as exc:
             logger.warning("Langfuse export failed trace=%s type=%s", self.trace_id, type(exc).__name__)
+            return False

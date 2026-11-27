@@ -1,6 +1,7 @@
 import json
 from dataclasses import replace
 from secrets import token_urlsafe
+from types import SimpleNamespace
 from uuid import uuid4
 
 import httpx
@@ -144,7 +145,7 @@ def test_chat_function_transport_sse_and_memory(client, headers, monkeypatch):
     assert len(saved) == 2 and all(row["status"] == "completed" for row in saved)
 
 
-def test_langfuse_export_contains_only_span_metadata(client, monkeypatch):
+def test_langfuse_export_contains_only_span_metadata(monkeypatch):
     from backend.app.core import tracing
 
     calls = []
@@ -154,15 +155,19 @@ def test_langfuse_export_contains_only_span_metadata(client, monkeypatch):
         return httpx.Response(200, request=httpx.Request("POST", url))
 
     monkeypatch.setattr(tracing.httpx, "post", capture)
-    settings = replace(client.app.state.settings, langfuse_url="https://trace.example.invalid",
-                       langfuse_public_key=token_urlsafe(24), langfuse_secret_key=token_urlsafe(24))
+    settings = SimpleNamespace(langfuse_url="https://trace.example.invalid",
+                               langfuse_public_key=token_urlsafe(24), langfuse_secret_key=token_urlsafe(24))
     trace = tracing.Trace(settings, "3" * 32)
-    with trace.step("resume.structured_extract", model="example", prompt_tokens=32):
-        pass
+    with trace.step("chat.tool", intent="knowledge_answer", document="person@example.invalid"):
+        with trace.step("resume.structured_extract", model="example", prompt_tokens=32,
+                        query="person@example.invalid"):
+            pass
     trace.flush()
     url, data = calls[0]
     assert url.endswith("/api/public/otel/v1/traces")
     assert data["headers"]["x-langfuse-ingestion-version"] == "4"
     spans = data["json"]["resourceSpans"][0]["scopeSpans"][0]["spans"]
-    assert spans[1]["parentSpanId"] == spans[0]["spanId"]
+    assert spans[2]["parentSpanId"] == spans[0]["spanId"]
+    assert spans[1]["parentSpanId"] == spans[2]["spanId"]
     assert {item["key"] for item in spans[1]["attributes"]} == {"talent.model", "talent.prompt_tokens"}
+    assert "person@example.invalid" not in json.dumps(data["json"])

@@ -109,14 +109,18 @@ def process(engine, storage, settings, task_id, token):
         error, retryable = "TASK_INTERNAL_ERROR", True
 
     try:
-        with Session(engine) as db, db.begin():
+        with trace.step("resume.task_write", task_kind=task.kind, attempt=task.attempts) as metadata, \
+                Session(engine) as db, db.begin():
             retry = error and retryable and task.attempts < MAX_ATTEMPTS
+            status = "queued" if retry else ("failed" if error else "succeeded")
+            metadata.update(task_status=status, error_code=error)
             result = db.execute(update(AsyncTask).where(AsyncTask.id == task_id,
                                 AsyncTask.lease_token == token, AsyncTask.status == "running").values(
-                status="queued" if retry else ("failed" if error else "succeeded"), error=error,
+                status=status, error=error,
                 lease_token=None, lease_until=None,
                 available_at=utcnow() + timedelta(seconds=2 ** task.attempts) if retry else utcnow()))
             if result.rowcount != 1:
+                metadata["task_status"] = "lease_replaced"
                 return
             if task.kind == "parse":
                 changes = {"blocks": [asdict(block) for block in blocks]} if blocks else {}

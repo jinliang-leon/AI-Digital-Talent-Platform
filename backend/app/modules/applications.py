@@ -5,6 +5,7 @@ from pydantic import Field
 from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError
 
+from ..core.privacy import clean_model_text
 from ..core.records import get_or_404, record, update_version
 from ..core.schema import Input, Reason, Version
 from ..core.security import Actor, DB, require_role
@@ -72,7 +73,7 @@ def visible(db, actor, identifier):
 
 def view(application, job_title, candidate_name, interviewer_name=None):
     return {"id": application.id, "job_id": application.job_id, "job_title": job_title,
-            "candidate_id": application.candidate_id, "candidate_name": candidate_name,
+            "candidate_id": application.candidate_id, "candidate_name": clean_model_text(candidate_name) or "候选人",
             "interviewer_id": application.interviewer_id, "interviewer_name": interviewer_name,
             "status": application.status, "version": application.version, "updated_at": application.updated_at}
 

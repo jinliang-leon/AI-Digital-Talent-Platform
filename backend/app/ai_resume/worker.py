@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from ..core.ai_client import ModelError, OpenAICompatible
 from ..core.config import Settings
 from ..core.embedding import embed
+from ..core.privacy import has_private
 from ..core.storage import LocalStorage, MinioStorage
 from ..core.tracing import Trace
 from ..db import make_engine
@@ -95,7 +96,10 @@ def process(engine, storage, settings, task_id, token):
                                     completion_tokens=result.usage.completion_tokens)
         elif task.kind == "index" and upload.evidence:
             with trace.step("resume.index", chunks=len(upload.evidence)) as metadata:
-                revision, values = embed(settings, [item["quote"] for item in upload.evidence], authorized=authorized)
+                quotes = [item["quote"] for item in upload.evidence]
+                if any(has_private(quote) for quote in quotes):
+                    raise DocumentError("INDEX_PRIVATE_EVIDENCE")
+                revision, values = embed(settings, quotes, authorized=authorized)
                 metadata["embedding_revision"] = revision
                 vectors = [
                     ResumeChunk(upload_id=upload.id, ordinal=number, text=item["quote"],

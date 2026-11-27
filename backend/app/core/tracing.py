@@ -8,10 +8,23 @@ from uuid import uuid4
 
 import httpx
 
+from .privacy import has_private
+
 logger = logging.getLogger(__name__)
 NUMERIC_FIELDS = {"attempt", "blocks", "bytes", "chunks", "completion_tokens", "hits", "prompt_tokens", "results"}
 LABEL_FIELDS = {"embedding_revision", "error_code", "intent", "model", "prompt_version", "task_kind", "task_status"}
 LABEL = re.compile(r"[A-Za-z0-9][A-Za-z0-9_:.\-/]{0,95}")
+SPAN_NAMES = {
+    "chat.route", "chat.tool", "interview.generate", "knowledge.answer", "knowledge.retrieve",
+    "resume.document_extract", "resume.index", "resume.structured_extract", "resume.task_write",
+    "synthetic.acceptance", "talent.query_plan", "talent.retrieve",
+}
+CONTROLLED_LABELS = {
+    "intent": {"talent_search", "job_progress", "knowledge_answer", "interview_draft", "unsupported"},
+    "task_kind": {"parse", "index"},
+    "task_status": {"queued", "failed", "succeeded", "lease_replaced"},
+}
+CREDENTIAL_MARKER = re.compile(r"(?i)(?:github_pat_|gh[pousr]_|sk-|bearer[-_]|api[_-]?key|secret|password)")
 
 
 def safe_attributes(metadata):
@@ -19,7 +32,9 @@ def safe_attributes(metadata):
     for key, value in metadata.items():
         if key in NUMERIC_FIELDS and type(value) is int and 0 <= value <= 2**53 - 1:
             attributes.append({"key": "talent." + key, "value": {"intValue": str(value)}})
-        elif key in LABEL_FIELDS and isinstance(value, str) and LABEL.fullmatch(value):
+        elif (key in LABEL_FIELDS and isinstance(value, str) and LABEL.fullmatch(value)
+              and not has_private(value) and not CREDENTIAL_MARKER.search(value)
+              and (key not in CONTROLLED_LABELS or value in CONTROLLED_LABELS[key])):
             attributes.append({"key": "talent." + key, "value": {"stringValue": value}})
     return attributes
 
@@ -27,7 +42,7 @@ def safe_attributes(metadata):
 class Trace:
     def __init__(self, settings, trace_id):
         self.settings = settings
-        self.trace_id = trace_id
+        self.trace_id = trace_id if re.fullmatch(r"[a-f0-9]{32}", trace_id) else uuid4().hex
         self.spans = []
         self.parents = []
 
@@ -47,7 +62,7 @@ class Trace:
         finally:
             self.parents.pop()
             span = {
-                "traceId": self.trace_id, "spanId": span_id, "name": name,
+                "traceId": self.trace_id, "spanId": span_id, "name": name if name in SPAN_NAMES else "talent.step",
                 "kind": 1, "startTimeUnixNano": str(started), "endTimeUnixNano": str(time_ns()),
                 "status": {"code": status},
                 "attributes": safe_attributes(metadata),

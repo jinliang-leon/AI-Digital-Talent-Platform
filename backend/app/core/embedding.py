@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 import httpx
 
 from .ai_client import ModelError
+from .privacy import has_private
 
 
 def terms(text):
@@ -35,8 +36,10 @@ def lexical_vector(text):
 
 def embed(settings, texts, *, authorized=False):
     model = settings.embedding_model
-    if not model or not authorized:
+    if not model or not authorized or not settings.external_ai_enabled:
         return "lexical-hash-256-v1", [lexical_vector(text) for text in texts]
+    if any(has_private(text) for text in texts):
+        raise ModelError("EMBEDDING_PRIVATE_INPUT")
     if not settings.model_key:
         raise ModelError("MODEL_CONFIGURATION_INVALID")
     url = urlsplit(settings.model_url)

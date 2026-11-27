@@ -67,6 +67,10 @@ jobs:
           docker compose exec -T api python -m alembic check
           python scripts/smoke_phase_one.py --require-compose
           python scripts/smoke_resume.py
+      - name: Verify persisted pgvector index data
+        run: |
+          test "$(docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U talent -d talent -Atc \
+            "SELECT EXISTS (SELECT 1 FROM resume_chunks WHERE vector_dims(embedding) = 256 AND embedding <=> embedding < 0.000001)")" = t
       - name: Report service states
         if: always()
         run: docker compose ps -a

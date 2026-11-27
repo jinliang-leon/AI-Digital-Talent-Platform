@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import Field
 from sqlalchemy import func, select
 
+from ..core.privacy import clean_model_text
 from ..core.records import get_or_404, record, update_version
 from ..core.schema import Input, Short, Text, Version
 from ..core.security import Actor, DB, can_read_raw, require_role
@@ -30,9 +31,10 @@ class CandidateUpdate(CandidateInput, Version):
 
 
 def candidate_view(candidate):
-    return {key: getattr(candidate, key) for key in (
-        "id", "name", "headline", "skills", "version", "synthetic", "created_at", "updated_at"
-    )}
+    return {"id": candidate.id, "name": clean_model_text(candidate.name) or "候选人",
+            "headline": clean_model_text(candidate.headline), "skills": clean_model_text(candidate.skills),
+            "version": candidate.version, "synthetic": candidate.synthetic,
+            "created_at": candidate.created_at, "updated_at": candidate.updated_at}
 
 
 def visible_candidate(db, actor, identifier):

@@ -22,7 +22,9 @@ services:
       timeout: 3s
       retries: 20
   minio:
-    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
+    build:
+      context: .
+      dockerfile: infra/minio.Dockerfile
     command: ["server", "/data", "--console-address", ":9001"]
     environment:
       MINIO_ROOT_USER: ${TALENT_MINIO_ACCESS_KEY:?Run setup_env.py first}

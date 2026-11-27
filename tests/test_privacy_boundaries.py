@@ -73,7 +73,9 @@ def test_chat_persist_read_memory_tool_parameters_and_results(client, headers, m
     monkeypatch.setattr(chat, "invoke", route)
     monkeypatch.setattr(chat.talent_search, "search", search)
     first = client.post(uri + "/stream", headers=hr, json={"client_id": "first", "query": MIXED})
-    assert first.status_code == 200 and "event: done" in first.text
+    assert first.status_code == 200 and "event: done" in first.text, first.text
+    too_long = client.post(uri + "/stream", headers=hr, json={"client_id": "long", "query": "a" * 801})
+    assert too_long.status_code == 422
     private_absent(first.text)
     assert "虚构全名" not in first.text and "Listing" in first.text
     with Session(state.engine) as db:

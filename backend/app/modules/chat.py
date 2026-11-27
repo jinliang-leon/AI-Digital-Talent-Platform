@@ -32,7 +32,7 @@ class ChatInput(Input):
 
 class ChatTurn(Input):
     client_id: str = Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_-]+$")
-    query: Short = Field(max_length=800)
+    query: str = Field(min_length=1, max_length=800)
     job_id: str | None = Field(None, max_length=36)
     knowledge_base_id: str | None = Field(None, max_length=36)
     application_id: str | None = Field(None, max_length=36)
